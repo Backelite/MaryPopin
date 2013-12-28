@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B88EF28186F3D0300922387 /* BKTOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B88EF27186F3D0300922387 /* BKTOptionCell.m */; };
 		2BDC27D4185F0DE900627E9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27D3185F0DE900627E9A /* Foundation.framework */; };
 		2BDC27D6185F0DE900627E9A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27D5185F0DE900627E9A /* CoreGraphics.framework */; };
 		2BDC27D8185F0DE900627E9A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27D7185F0DE900627E9A /* UIKit.framework */; };
@@ -35,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B88EF26186F3D0300922387 /* BKTOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTOptionCell.h; sourceTree = "<group>"; };
+		2B88EF27186F3D0300922387 /* BKTOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTOptionCell.m; sourceTree = "<group>"; };
 		2BDC27D0185F0DE900627E9A /* MaryPopinDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaryPopinDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BDC27D3185F0DE900627E9A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2BDC27D5185F0DE900627E9A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -125,6 +128,8 @@
 				2BDC280C185F106300627E9A /* BKTPopinControllerViewController.h */,
 				2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */,
 				2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */,
+				2B88EF26186F3D0300922387 /* BKTOptionCell.h */,
+				2B88EF27186F3D0300922387 /* BKTOptionCell.m */,
 			);
 			path = MaryPopinDemo;
 			sourceTree = "<group>";
@@ -251,6 +256,7 @@
 				2BDC27E0185F0DE900627E9A /* main.m in Sources */,
 				2BDC280B185F0E2600627E9A /* UIViewController+MaryPopin.m in Sources */,
 				2BDC27EA185F0DE900627E9A /* BKTViewController.m in Sources */,
+				2B88EF28186F3D0300922387 /* BKTOptionCell.m in Sources */,
 				2BDC280F185F106300627E9A /* BKTPopinControllerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,7 +378,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MaryPopinDemo/MaryPopinDemo-Prefix.pch";
 				INFOPLIST_FILE = "MaryPopinDemo/MaryPopinDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -385,7 +393,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MaryPopinDemo/MaryPopinDemo-Prefix.pch";
 				INFOPLIST_FILE = "MaryPopinDemo/MaryPopinDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

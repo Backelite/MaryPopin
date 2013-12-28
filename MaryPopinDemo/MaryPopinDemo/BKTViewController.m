@@ -12,6 +12,8 @@
 
 @interface BKTViewController ()
 
+@property (nonatomic, getter = isDismissable) BOOL dismissable;
+
 - (IBAction)presentPopinPressed:(id)sender;
 
 @end
@@ -21,19 +23,37 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (IBAction)presentPopinPressed:(id)sender {
+    NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
     BKTPopinControllerViewController *popin = [[BKTPopinControllerViewController alloc] init];
-    [popin setPopinTransitionStyle:BKTPopinTransitionStyleSnap];
-    [self presentPopinController:popin animated:YES completion:NULL];
+    [popin setPopinTransitionStyle:[self transitionStyleForIndexPath:selectedIndexPath]];
+    if ([self isDismissable]) {
+        [popin setPopinOptions:BKTPopinDefault];
+    } else {
+        [popin setPopinOptions:BKTPopinDisableAutoDismiss];
+    }
+    [self.navigationController presentPopinController:popin animated:YES completion:NULL];
+}
+
+- (IBAction)isDismissableValueChanged:(id)sender
+{
+    [self setDismissable:((UISwitch *)sender).isOn];
+}
+
+- (BKTPopinTransitionStyle)transitionStyleForIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return indexPath.row;
+    }
+    return 0;
 }
 
 @end

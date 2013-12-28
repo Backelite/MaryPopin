@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKTViewController : UIViewController
+@interface BKTViewController : UITableViewController
 
 @end
