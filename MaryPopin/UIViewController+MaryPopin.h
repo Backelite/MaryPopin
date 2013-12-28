@@ -23,7 +23,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
     BKTPopinTransitionStyleSlide,
     BKTPopinTransitionStyleCrossDissolve,
     BKTPopinTransitionStyleZoom,
@@ -31,20 +31,20 @@ typedef enum {
     BKTPopinTransitionStyleSpringyZoom,
     //UIDynamics transition styles
     BKTPopinTransitionStyleSnap
-} BKTPopinTransitionStyle;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, BKTPopinTransitionDirection) {
     BKTPopinTransitionDirectionBottom = 0,
     BKTPopinTransitionDirectionTop,
     BKTPopinTransitionDirectionLeft,
     BKTPopinTransitionDirectionRight
-} BKTPopinTransitionDirection;
+};
 
-typedef enum {
-    BKTPopinOptionNone = 0,
-    BKTPopinOptionDontListenKeyboardNotification = 1 << 0,
-    BKTPopinOptionDontBeDismissableClickingOutsideOfTheView = 1 << 1
-} BKTPopinOption;
+typedef NS_ENUM(NSInteger, BKTPopinOption) {
+    BKTPopinDefault = 0,
+    BKTPopinIgnoreKeyboardNotification = 1 << 0,
+    BKTPopinDisableAutoDismiss = 1 << 1
+};
 
 /**
  * Category allowing modal-like presentation of view controllers but with more configuration options.
@@ -75,7 +75,7 @@ typedef enum {
 - (BKTPopinTransitionDirection)popinTransitionDirection;
 - (void)setPopinTransitionDirection:(BKTPopinTransitionDirection)transitionDirection;
 
-- (BKTPopinOption)popinMultipleOptions;
-- (void)setPopinMultipleOptions:(BKTPopinOption)popinOptions;
+- (BKTPopinOption)popinOptions;
+- (void)setPopinOptions:(BKTPopinOption)popinOptions;
 
 @end

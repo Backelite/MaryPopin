@@ -50,9 +50,10 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         
         //Background dimming view
         UIView *dimmingView = [[UIView alloc] initWithFrame:self.view.bounds];
+        [dimmingView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
         
-        BKTPopinOption options = [popinController popinMultipleOptions];
-        if (! (options & BKTPopinOptionDontBeDismissableClickingOutsideOfTheView)) {
+        BKTPopinOption options = [popinController popinOptions];
+        if (! (options & BKTPopinDisableAutoDismiss)) {
             [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.1]];
             UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentPopinController)];
             [dimmingView addGestureRecognizer:tapGesture];
@@ -100,7 +101,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         }
         
         //Keyboard notification
-        if (! (options & BKTPopinOptionDontListenKeyboardNotification)) {
+        if (! (options & BKTPopinIgnoreKeyboardNotification)) {
             [[NSNotificationCenter defaultCenter] addObserver:popinController selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         }
     }
@@ -257,6 +258,12 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (void)addPopinToHierarchy:(UIViewController *)popinController
 {
+    //Remove autoresizing mask
+    [popinController.view setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|
+     UIViewAutoresizingFlexibleRightMargin|
+     UIViewAutoresizingFlexibleTopMargin|
+     UIViewAutoresizingFlexibleBottomMargin];
+    
     //Add child with animation
     [self addChildViewController:popinController];
     
@@ -359,14 +366,14 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     objc_setAssociatedObject(self, @selector(popinTransitionDirection), [NSNumber numberWithInt:transitionDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BKTPopinOption)popinMultipleOptions
+- (BKTPopinOption)popinOptions
 {
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 
-- (void)setPopinMultipleOptions:(BKTPopinOption)popinOptions
+- (void)setPopinOptions:(BKTPopinOption)popinOptions
 {
-    objc_setAssociatedObject(self, @selector(popinMultipleOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *)dimmingView
