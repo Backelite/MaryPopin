@@ -25,6 +25,7 @@
 
 /**
  *  Transition styles available when presenting popin view controllers.
+ *  @since v1.0
  */
 typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
     /**
@@ -56,6 +57,7 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
 
 /**
  *  Transition direction when presenting popins. Default is BKTPopinTransitionDirectionBottom.
+ *  @since v1.0
  */
 typedef NS_ENUM(NSInteger, BKTPopinTransitionDirection) {
     /**
@@ -78,6 +80,7 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionDirection) {
 
 /**
  *  Options to configure popin behavior to user related events. The following options are compoundables.
+ *  @since v1.0
  */
 typedef NS_ENUM(NSInteger, BKTPopinOption) {
     /**
@@ -95,17 +98,24 @@ typedef NS_ENUM(NSInteger, BKTPopinOption) {
 };
 
 /**
- * Category allowing modal-like presentation of view controllers but with more configuration options.
- * Configuration options include pop-in size, transition style, transition direction, response to keyboard notifications and auto dismiss.
+ * `MaryPopin` is a category allowing modal-like presentation of view controllers but with more configuration options.
+ * Configuration options include popin size, transition style, transition direction, response to keyboard notifications and auto dismiss.
+ * @since v1.0
  */
-@interface UIViewController (CDN) <UIDynamicAnimatorDelegate>
+@interface UIViewController (MaryPopin) <UIDynamicAnimatorDelegate>
+
+///---------------------
+/// @name Presentation and dismiss
+///---------------------
 
 /**
  *  Present a popin controller as a child of the receiver. By default the popin keep its size when presented. If it is bigger than parent controller, the popin is resized to fit inside its parent.
  *
  *  @param popinController The controller to present as a popin.
- *  @param animated        Pass YES to animate the presentation. Otherwise, pass NO.
- *  @param completion      A completion handler, or NULL.
+ *  @param animated        Pass `YES` to animate the presentation. Otherwise, pass `NO`.
+ *  @param completion      A completion handler, or `NULL`.
+ *  @see -presentPopinController:fromRect:animated:completion:
+ *  @since v1.0
  */
 - (void)presentPopinController:(UIViewController *)popinController animated:(BOOL)animated
                     completion:(void(^)(void))completion;
@@ -115,8 +125,9 @@ typedef NS_ENUM(NSInteger, BKTPopinOption) {
  *
  *  @param popinController The controller to present as a popin.
  *  @param rect            An arbitrary rect in which the popin should be centered.
- *  @param animated        Pass YES to animate the presentation. Otherwise, pass NO.
- *  @param completion      A completion handler, or NULL.
+ *  @param animated        Pass `YES` to animate the presentation. Otherwise, pass `NO`.
+ *  @param completion      A completion handler, or `NULL`.
+ *  @since v1.0
  */
 - (void)presentPopinController:(UIViewController *)popinController fromRect:(CGRect)rect animated:(BOOL)animated
                     completion:(void(^)(void))completion;
@@ -124,37 +135,49 @@ typedef NS_ENUM(NSInteger, BKTPopinOption) {
 /**
  *  Dismiss the visible popin if any.
  *
- *  @param animated Pass YES to animate the dismiss. Otherwise, pass NO.
+ *  @param animated Pass `YES` to animate the dismiss. Otherwise, pass `NO`.
+ *  @see dismissCurrentPopinControllerAnimated:completion:
+ *  @since v1.0
  */
 - (void)dismissCurrentPopinControllerAnimated:(BOOL)animated;
 
 /**
  *  Dismiss the visible popin if any.
  *
- *  @param animated   Pass YES to animate the dismiss. Otherwise, pass NO.
- *  @param completion A completion handler, or NULL.
+ *  @param animated   Pass `YES` to animate the dismiss. Otherwise, pass `NO`.
+ *  @param completion A completion handler, or `NULL`.
+ *  @since v1.0
  */
 - (void)dismissCurrentPopinControllerAnimated:(BOOL)animated completion:(void(^)(void))completion;
+
+///---------------------
+/// @name Properties accessors
+///---------------------
 
 /**
  *  A reference to the popin presented as a child controller.
  *
- *  @return The controller presented as a popin or nil.
+ *  @return The controller presented as a popin or `nil`.
+ *  @see -presentingPopinViewController
+ *  @since v1.0
  */
 - (UIViewController *)presentedPopinViewController;
 
 /**
  *  A reference to the parent presenting the popin.
  *
- *  @return The controller presenting the popin, or nil.
+ *  @return The controller presenting the popin, or `nil`.
+ *  @see -presentedPopinViewController
+ *  @since v1.0
  */
 - (UIViewController *)presentingPopinViewController;
 
 /**
  *  Get desired size for popin.
  *
- *  @return The desired size for this controller when presented as a popin. Or CGSizeZero if not set.
- *  @see \ref setPreferedPopinContentSize
+ *  @return The desired size for this controller when presented as a popin. Or `CGSizeZero` if not set.
+ *  @see -setPreferedPopinContentSize:
+ *  @since v1.0
  */
 - (CGSize)preferedPopinContentSize;
 
@@ -163,48 +186,58 @@ typedef NS_ENUM(NSInteger, BKTPopinOption) {
  *  If not set, the default size will be the controller view size.
  *
  *  @param preferredSize The desired size for this controller when presented as a popin.
+ *  @since v1.0
  */
 - (void)setPreferedPopinContentSize:(CGSize)preferredSize;
 
 /**
- *  The transition style to use when presenting a popin.
+ *  The transition style to use when presenting a popin. Default value is `BKTPopinTransitionStyleSlide`.
  *
- *  @return A transition style value.
+ *  @return A BKTPopinTransitionStyle value.
+ *  @see -setPopinTransitionStyle:
+ *  @since v1.0
  */
 - (BKTPopinTransitionStyle)popinTransitionStyle;
 
 /**
- *  The transition style to use when presenting a popin. For a list of possible transition style, see \ref BKTPopinTransitionStyle.
+ *  The transition style to use when presenting a popin. For a list of possible transition style, see `BKTPopinTransitionStyle`.
  *
- *  @param transitionStyle A transition style value.
+ *  @param transitionStyle A BKTPopinTransitionStyle value.
+ *  @since v1.0
  */
 - (void)setPopinTransitionStyle:(BKTPopinTransitionStyle)transitionStyle;
 
 /**
- *  The transition direction to use when presenting a popin.
+ *  The transition direction to use when presenting a popin. Default value is `BKTPopinTransitionDirectionBottom`.
  *
- *  @return A transition direction value.
+ *  @return A BKTPopinTransitionDirection value.
+ *  @see -setPopinTransitionDirection:
+ *  @since v1.0
  */
 - (BKTPopinTransitionDirection)popinTransitionDirection;
 
 /**
- *  The transition direction to use when presenting a popin. For a list of possible transition direction, see \ref BKTPopinTransitionDirection
+ *  The transition direction to use when presenting a popin. For a list of possible transition direction, see BKTPopinTransitionDirection
  *
- *  @param transitionDirection A transition direction value.
+ *  @param transitionDirection A BKTPopinTransitionDirection value.
+ *  @since v1.0
  */
 - (void)setPopinTransitionDirection:(BKTPopinTransitionDirection)transitionDirection;
 
 /**
- *  The options to apply to the popin.
+ *  The options to apply to the popin. Default value is `BKTPopinDefault`.
  *
  *  @return The BKTPopinOption values as a bit field.
+ *  @see -setPopinOptions:
+ *  @since v1.0
  */
 - (BKTPopinOption)popinOptions;
 
 /**
- *  The options to apply to the popin. For a list of possible options, see \ref BKTPopinOption
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinOption
  *
  *  @param popinOptions The BKTPopinOption values separated by | character.
+ *  @since v1.0
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
 

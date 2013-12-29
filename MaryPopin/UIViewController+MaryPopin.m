@@ -31,7 +31,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 	return myRect;
 }
 
-@implementation UIViewController (CDN)
+@implementation UIViewController (MaryPopin)
 
 #pragma mark - Popin presentation methods
 
