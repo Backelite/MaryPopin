@@ -75,18 +75,22 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self addPopinToHierarchy:popinController];
             [popinController.view setFrame:popinFrame];
             
-            [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
-                                  delay:0.0
-                 usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
-                  initialSpringVelocity:1.0
-                                options:UIViewAnimationOptionCurveEaseOut
-                             animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
-                             completion:^(BOOL finished) {
-                                 [popinController didMoveToParentViewController:self];
-                                 if (completion) {
-                                     completion();
-                                 }
-                             }];
+            if ([popinController popinTransitionUsesDynamics]) {
+                [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
+            } else {
+                [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
+                                      delay:0.0
+                     usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
+                      initialSpringVelocity:1.0
+                                    options:UIViewAnimationOptionCurveEaseOut
+                                 animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
+                                 completion:^(BOOL finished) {
+                                     [popinController didMoveToParentViewController:self];
+                                     if (completion) {
+                                         completion();
+                                     }
+                                 }];
+            }
         } else {
             //Adding
             [self.view addSubview:dimmingView];
@@ -132,15 +136,20 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self.dimmingView removeFromSuperview];
             [self setDimmingView:nil];
         }];
-        [UIView animateWithDuration:0.3
-                              delay:0 options:UIViewAnimationOptionCurveEaseIn
-                         animations:[self outAnimationForPopinController:presentedPopin]
-                         completion:^(BOOL finished) {
-                             [self removePopinFromHierarchy:presentedPopin];
-                             if (completion) {
-                                 completion();
-                             }
-                         }];
+        
+        if ([presentedPopin popinTransitionUsesDynamics]) {
+            [self snapOutAnimationForPopinController:presentedPopin withDirection:presentedPopin.popinTransitionDirection completion:completion];
+        } else {
+            [UIView animateWithDuration:0.3
+                                  delay:0 options:UIViewAnimationOptionCurveEaseIn
+                             animations:[self outAnimationForPopinController:presentedPopin]
+                             completion:^(BOOL finished) {
+                                 [self removePopinFromHierarchy:presentedPopin];
+                                 if (completion) {
+                                     completion();
+                                 }
+                             }];
+        }
     } else {
         [self removePopinFromHierarchy:presentedPopin];
         
@@ -284,23 +293,25 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
 {
-    if ([[aView motionEffects] count] == 0) {
-        UIInterpolatingMotionEffect *effectX;
-        UIInterpolatingMotionEffect *effectY;
-        effectX = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
-                                                                  type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-        effectY = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
-                                                                  type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-        
-        
-        effectX.maximumRelativeValue = @(depth);
-        effectX.minimumRelativeValue = @(-depth);
-        effectY.maximumRelativeValue = @(depth);
-        effectY.minimumRelativeValue = @(-depth);
-        
-        UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
-        [motionGroup setMotionEffects:@[effectX, effectY]];
-        [aView addMotionEffect:motionGroup];
+    if ([aView respondsToSelector:@selector(motionEffects)]) {
+        if ([[aView motionEffects] count] == 0) {
+            UIInterpolatingMotionEffect *effectX;
+            UIInterpolatingMotionEffect *effectY;
+            effectX = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
+                                                                      type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+            effectY = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
+                                                                      type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+            
+            
+            effectX.maximumRelativeValue = @(depth);
+            effectX.minimumRelativeValue = @(-depth);
+            effectY.maximumRelativeValue = @(depth);
+            effectY.minimumRelativeValue = @(-depth);
+            
+            UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
+            [motionGroup setMotionEffects:@[effectX, effectY]];
+            [aView addMotionEffect:motionGroup];
+        }
     }
 }
 
@@ -411,8 +422,6 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomInAnimationForPopinController:popinController toPosition:finalFrame];
-        case BKTPopinTransitionStyleSnap:
-            return [self snapInAnimationForPopinController:popinController toPosition:finalFrame withDirection:direction];
         default:
             return [self alphaInAnimationForPopinController:popinController toPosition:finalFrame];
     }
@@ -431,8 +440,6 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomOutAnimationForPopinController:popinController];
-        case BKTPopinTransitionStyleSnap:
-            return [self snapOutAnimationForPopinController:popinController withDirection:direction];
         default:
             return [self alphaOutAnimationForPopinController:popinController];
     }
@@ -510,20 +517,29 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 }
 
 //Snap
-- (void (^)(void))snapInAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame withDirection:(BKTPopinTransitionDirection)direction
+- (void (^)(void))snapInAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame withDirection:(BKTPopinTransitionDirection)direction completion:(void(^)(void))completion
 {
     //Animation setup
     popinController.view.frame = [self animationFrameForPopinController:popinController margin:30.0f];
     
     UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:popinController.view snapToPoint:CGPointMake(CGRectGetMidX(finalFrame), CGRectGetMidY(finalFrame))];
     [snap setDamping:0.6f];
+    __weak UISnapBehavior *weakSnap = snap;
+    snap.action = ^ {
+        if (CGRectEqualToRect(popinController.view.frame, finalFrame)) {
+            if (completion) {
+                completion();
+            }
+            weakSnap.action = nil;
+        }
+    };
     [self.animator addBehavior:snap];
     
     //Change properties values
     return NULL;
 }
 
-- (void (^)(void))snapOutAnimationForPopinController:(UIViewController *)popinController withDirection:(BKTPopinTransitionDirection)direction
+- (void (^)(void))snapOutAnimationForPopinController:(UIViewController *)popinController withDirection:(BKTPopinTransitionDirection)direction completion:(void(^)(void))completion
 {
     [self.animator removeAllBehaviors];
     
@@ -533,8 +549,20 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     //Animation setup
     [self.animator setDelegate:self];
     UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:popinController.view snapToPoint:CGPointMake(CGRectGetMidX(finalFrame), CGRectGetMidY(finalFrame))];
-    [snap setDamping:0.9f];
+    [snap setDamping:0.8f];
+    snap.action = ^ {
+        CGRect popinFrame = popinController.view.frame;
+        if (CGRectIntersectsRect(popinFrame, self.view.frame) == NO) {
+            [self.animator removeAllBehaviors];
+            [self setAnimator:nil];
+            [self removePopinFromHierarchy:self.presentedPopinViewController];
+            if (completion) {
+                completion();
+            }
+        }
+    };
     [self.animator addBehavior:snap];
+    
     return NULL;
 }
 
@@ -542,7 +570,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (BOOL)popinTransitionUsesDynamics
 {
-    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap;
+    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && @protocol(UIDynamicItem) != NULL;
 }
 
 + (CGFloat)dampingValueForTransitionStyle:(BKTPopinTransitionStyle)transitionStyle
@@ -577,16 +605,6 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             break;
     }
     return animationDuration;
-}
-
-#pragma mark - Dynamic animator delegate
-- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
-{
-    if ([animator isEqual:self.animator]) {
-        [[self animator] removeAllBehaviors];
-        [self setAnimator:nil];
-        [self removePopinFromHierarchy:self.presentedPopinViewController];
-    }
 }
 
 @end
