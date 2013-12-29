@@ -56,7 +56,10 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
-    [self.navigationController presentPopinController:popin animated:YES completion:NULL];
+    [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
+    [self.navigationController presentPopinController:popin animated:YES completion:^{
+        NSLog(@"Popin presented !");
+    }];
 }
 
 - (IBAction)isDismissableValueChanged:(id)sender

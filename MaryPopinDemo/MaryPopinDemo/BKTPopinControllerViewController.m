@@ -34,7 +34,9 @@
 @implementation BKTPopinControllerViewController
 
 - (IBAction)closeButtonPressed:(id)sender {
-    [self.presentingPopinViewController dismissCurrentPopinControllerAnimated:YES];
+    [self.presentingPopinViewController dismissCurrentPopinControllerAnimated:YES completion:^{
+        NSLog(@"Popin dismissed !");
+    }];
 }
 
 @end
