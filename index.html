@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Marypopin by Backelite</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Backelite/MaryPopin">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Backelite/MaryPopin/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Backelite/MaryPopin/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Marypopin</h1>
+          <p>Category to display modal-like view controllers with more options</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Backelite">Backelite</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="marypopin" class="anchor" href="#marypopin"><span class="octicon octicon-link"></span></a>MaryPopin</h1>
+
+<p>MaryPopin is a category on UIViewController to present modal like controller with more flexibility.</p>
+
+<p><em>- Wait, what? There are tons of similar projects on the web to do that!</em></p>
+
+<p>Well, your are right, but here are some strengths of this project :</p>
+
+<ul>
+<li>No subclassing is required, you can use it on your existing view controllers like you do with modal controllers,</li>
+<li>No <code>UIWindow</code> manipulation, MaryPopin uses <code>UIViewControllers</code> containment, so rotation is properly handled,</li>
+<li>Auto-dismiss when touching outside of the popin</li>
+<li>Controller presentation size can be customized</li>
+<li>Larger choice of transition styles and directions</li>
+<li>Subtle paralax effect to fit well with iOS 7 guidelines</li>
+<li>Automatic moves to respond to keyboard events</li>
+<li>Completion blocks on present and dismiss transitions</li>
+</ul><p>Yes, you can say it, it is Supercalifragilisticexpialidocious!</p>
+
+<p><em>- Okay. But why MaryPopin?</em>
+Popin, popup, modal may look similar, but in reality, there are some slight differences. Here, the controller view is presented inside its parent controller 
+that is why we name it a popin controller. And as it is implemented as a category, it is as nice and magic as the famous nanny.</p>
+
+<p><img src="https://github.com/Backelite/MaryPopin/raw/master/MaryPopin.gif" alt="MaryPopin demo" title="Sample project animation"></p>
+
+<h1></h1>
+
+<h2>
+<a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>Changes</h2>
+
+<p>v 1.0</p>
+
+<ul>
+<li>First public release</li>
+</ul><h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<h3>
+<a name="the-pod-way" class="anchor" href="#the-pod-way"><span class="octicon octicon-link"></span></a>The Pod way</h3>
+
+<p>Just add the following line in your podfile</p>
+
+<pre><code>pod 'MaryPopin'
+</code></pre>
+
+<h3>
+<a name="the-old-school-way" class="anchor" href="#the-old-school-way"><span class="octicon octicon-link"></span></a>The old school way</h3>
+
+<p>Drag and drop the category files in your project and you are done.</p>
+
+<h3>
+<a name="using-marypopin" class="anchor" href="#using-marypopin"><span class="octicon octicon-link"></span></a>Using MaryPopin</h3>
+
+<h4>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic usage</h4>
+
+<p>First, import <code>UIViewController+MaryPopin.h</code> header.</p>
+
+<p>In your current view controller, you can create a view controller and present it as a popin.</p>
+
+<div class="highlight highlight-Objective-C"><pre>
+    <span class="c1">//Create the popin view controller</span>
+    <span class="n">UIViewController</span> <span class="o">*</span><span class="n">popin</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithNibName</span><span class="o">:</span><span class="s">@"NibName"</span> <span class="n">bundle</span><span class="o">:</span><span class="s">@"Bundle"</span><span class="p">];</span>
+    <span class="c1">//Customize transition if needed</span>
+        <span class="p">[</span><span class="n">popin</span> <span class="n">setPopinTransitionStyle</span><span class="o">:</span><span class="n">BKTPopinTransitionStyleSlide</span><span class="p">];</span>
+
+        <span class="c1">//Add options</span>
+        <span class="p">[</span><span class="n">popin</span> <span class="n">setPopinOptions</span><span class="o">:</span><span class="n">BKTPopinDisableAutoDismiss</span><span class="p">];</span>
+
+        <span class="c1">//Customize transition direction if needed</span>
+        <span class="p">[</span><span class="n">popin</span> <span class="n">setPopinTransitionDirection</span><span class="o">:</span><span class="n">BKTPopinTransitionDirectionTop</span><span class="p">];</span>
+
+        <span class="c1">//Present popin on the desired controller</span>
+        <span class="c1">//Note that if you are using a UINavigationController, the navigation bar will be active if you present</span>
+        <span class="c1">// the popin on the visible controller instead of presenting it on the navigation controller</span>
+        <span class="p">[</span><span class="n">self</span> <span class="n">presentPopinController</span><span class="o">:</span><span class="n">popin</span> <span class="n">animated</span><span class="o">:</span><span class="nb">YES</span> <span class="n">completion</span><span class="o">:^</span><span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Popin presented !"</span><span class="p">);</span>
+        <span class="p">}];</span>
+</pre></div>
+
+<p>Respectively, to dismiss the popin from your current view controller</p>
+
+<div class="highlight highlight-Objective-C"><pre>
+    <span class="p">[</span><span class="n">self</span> <span class="n">dismissCurrentPopinControllerAnimated</span><span class="o">:</span><span class="nb">YES</span> <span class="n">completion</span><span class="o">:^</span><span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Popin dismissed !"</span><span class="p">);</span>
+    <span class="p">}];</span>
+</pre></div>
+
+<h4>
+<a name="advanced-usage" class="anchor" href="#advanced-usage"><span class="octicon octicon-link"></span></a>Advanced usage</h4>
+
+<p>Todo.</p>
+
+<h3>
+<a name="sample-project" class="anchor" href="#sample-project"><span class="octicon octicon-link"></span></a>Sample project</h3>
+
+<p>The sample project show how to present and dismiss a popin with different transition styles.</p>
+
+<h2>
+<a name="-requirements" class="anchor" href="#-requirements"><span class="octicon octicon-link"></span></a><a name="requirements"></a> Requirements</h2>
+
+<p>MaryPopin requires iOS 7.0 and Xcode 5 as it uses UIKit Dynamics and motion effects.</p>
+
+<h3>
+<a name="arc" class="anchor" href="#arc"><span class="octicon octicon-link"></span></a>ARC</h3>
+
+<p>MaryPopin uses ARC.<br>
+If you are using MaryPopin in a non-arc project, you will need to set a <code>-fobjc-arc</code> compiler flag on every MaryPopin source files.<br>
+To set a compiler flag in Xcode, go to your active target and select the "Build Phases" tab. Then select MaryPopin source files, press Enter, insert -fobjc-arc and then "Done" to enable ARC for MaryPopin.</p>
+
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>If you want to contribute to this project, please submit a pull request. </p>
+
+<h2>
+<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a>Licence</h2>
+
+<p>MaryPopin is available under the MIT license. See the LICENSE file for more info.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
