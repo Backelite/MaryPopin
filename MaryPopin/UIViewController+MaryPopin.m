@@ -82,7 +82,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                       delay:0.0
                      usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
                       initialSpringVelocity:1.0
-                                    options:UIViewAnimationOptionCurveEaseOut
+                                    options:UIViewAnimationOptionCurveEaseInOut
                                  animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                  completion:^(BOOL finished) {
                                      [popinController didMoveToParentViewController:self];
@@ -601,7 +601,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             animationDuration = 0.5;
             break;
         default:
-            animationDuration = 0.3;
+            animationDuration = 0.5;
             break;
     }
     return animationDuration;
