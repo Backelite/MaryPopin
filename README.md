@@ -22,6 +22,8 @@ Yes, you can say it, it is Supercalifragilisticexpialidocious!
 Popin, popup, modal may look similar, but in reality, there are some slight differences. Here, the controller view is presented inside its parent controller 
 that is why we name it a popin controller. And as it is implemented as a category, it is as nice and magic as the famous nanny.
 
+![MaryPopin demo](https://github.com/Backelite/MaryPopin/raw/master/MaryPopin.gif "Sample project animation")
+
 =========
 
 ## Changes
