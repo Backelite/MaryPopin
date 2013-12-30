@@ -41,7 +41,7 @@
         <h1>
 <a name="marypopin" class="anchor" href="#marypopin"><span class="octicon octicon-link"></span></a>MaryPopin</h1>
 
-<p>MaryPopin is a category on UIViewController to present modal like controller with more flexibility.</p>
+<p>MaryPopin is a category on <code>UIViewController</code> to present modal like controller with more flexibility.</p>
 
 <p><em>- Wait, what? There are tons of similar projects on the web to do that!</em></p>
 
@@ -130,7 +130,18 @@ that is why we name it a popin controller. And as it is implemented as a categor
 <h4>
 <a name="advanced-usage" class="anchor" href="#advanced-usage"><span class="octicon octicon-link"></span></a>Advanced usage</h4>
 
-<p>Todo.</p>
+<p>By default, popin is centered in the parent controller view. But you can provide a <code>CGRect</code> in which the popin should be centered. Note that the <code>CGRect</code> must be included in the parent controller view bounds, otherwise it may lead to unexpected behaviors.</p>
+
+<div class="highlight highlight-Objective-C"><pre>
+    <span class="n">BKTPopinControllerViewController</span> <span class="o">*</span><span class="n">popin</span> <span class="o">=</span> <span class="p">[[</span><span class="n">BKTPopinControllerViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">popin</span> <span class="n">setPopinTransitionStyle</span><span class="o">:</span><span class="n">BKTPopinTransitionStyleCrossDissolve</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">popin</span> <span class="n">setPopinTransitionDirection</span><span class="o">:</span><span class="n">BKTPopinTransitionDirectionTop</span><span class="p">];</span>
+
+    <span class="n">CGRect</span> <span class="n">presentationRect</span> <span class="o">=</span> <span class="n">CGRectOffset</span><span class="p">(</span><span class="n">CGRectInset</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="n">presentPopinController</span><span class="o">:</span><span class="n">popin</span> <span class="n">fromRect</span><span class="o">:</span><span class="n">presentationRect</span> <span class="n">animated</span><span class="o">:</span><span class="nb">YES</span> <span class="n">completion</span><span class="o">:^</span><span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Popin presented !"</span><span class="p">);</span>
+    <span class="p">}];</span>
+</pre></div>
 
 <h3>
 <a name="sample-project" class="anchor" href="#sample-project"><span class="octicon octicon-link"></span></a>Sample project</h3>
@@ -152,7 +163,7 @@ To set a compiler flag in Xcode, go to your active target and select the "Build 
 <h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
-<p>If you want to contribute to this project, please submit a pull request. </p>
+<p>Contributions for bug fixing or improvements are welcomed. Feel free to submit a pull request.</p>
 
 <h2>
 <a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a>Licence</h2>
@@ -162,6 +173,16 @@ To set a compiler flag in Xcode, go to your active target and select the "Build 
 
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-44164731-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
