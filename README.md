@@ -1,7 +1,7 @@
 MaryPopin
 =========
 
-MaryPopin is a category on UIViewController to present modal like controller with more flexibility.
+MaryPopin is a category on `UIViewController` to present modal like controller with more flexibility.
 
 *- Wait, what? There are tons of similar projects on the web to do that!*
 
@@ -79,7 +79,19 @@ Respectively, to dismiss the popin from your current view controller
     }];
 ```
 #### Advanced usage
-Todo.
+By default, popin is centered in the parent controller view. But you can provide a `CGRect` in which the popin should be centered. Note that the `CGRect` must be included in the parent controller view bounds, otherwise it may lead to unexpected behaviors.
+
+```Objective-C
+
+	BKTPopinControllerViewController *popin = [[BKTPopinControllerViewController alloc] init];
+    [popin setPopinTransitionStyle:BKTPopinTransitionStyleCrossDissolve];
+    [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
+    
+    CGRect presentationRect = CGRectOffset(CGRectInset(self.view.bounds, 0.0, 100.0), 0.0, 200.0);
+    [self.navigationController presentPopinController:popin fromRect:presentationRect animated:YES completion:^{
+        NSLog(@"Popin presented !");
+    }];
+```
 
 ### Sample project
 The sample project show how to present and dismiss a popin with different transition styles.
@@ -93,7 +105,7 @@ If you are using MaryPopin in a non-arc project, you will need to set a `-fobjc-
 To set a compiler flag in Xcode, go to your active target and select the "Build Phases" tab. Then select MaryPopin source files, press Enter, insert -fobjc-arc and then "Done" to enable ARC for MaryPopin.
 
 ## Contributing
-If you want to contribute to this project, please submit a pull request. 
+Contributions for bug fixing or improvements are welcomed. Feel free to submit a pull request.
 
 ## Licence
 MaryPopin is available under the MIT license. See the LICENSE file for more info.

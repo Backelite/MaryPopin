@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MaryPopin"
-  s.version      = "0.0.1"
+  s.version      = "1.0"
   s.summary      = "Category to display modal-like view controllers with more options"
 
   s.description  = <<-DESC
