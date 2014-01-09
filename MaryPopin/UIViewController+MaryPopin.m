@@ -24,6 +24,8 @@
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
+typedef void (^animationBlock)(void);
+
 CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 {
 	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
@@ -78,6 +80,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             if ([popinController popinTransitionUsesDynamics]) {
                 [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
             } else {
+                if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
                 [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
                                       delay:0.0
                      usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
@@ -90,6 +93,19 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                          completion();
                                      }
                                  }];
+                    
+                }
+                else {
+                    [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle] animations:^{
+                        animationBlock animationBlock = [self inAnimationForPopinController:popinController toPosition:popinFrame];
+                        animationBlock();
+                    } completion:^(BOOL finished) {
+                        [popinController didMoveToParentViewController:self];
+                        if (completion) {
+                            completion();
+                        }
+                    }];
+                }
             }
         } else {
             //Adding
