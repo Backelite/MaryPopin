@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '5.0'
 
-  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :commit => "9da533fcbec940e92bfa619684c37b7ab63c49c5" }
+  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :tag => "1.1" }
 
   s.source_files  = 'MaryPopin/**/*.{h,m}'
 
