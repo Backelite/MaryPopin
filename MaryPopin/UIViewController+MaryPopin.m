@@ -78,6 +78,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             if ([popinController popinTransitionUsesDynamics]) {
                 [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
             } else {
+                if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
                 [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
                                       delay:0.0
                      usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
@@ -90,6 +91,18 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                          completion();
                                      }
                                  }];
+                    
+                }
+                else {
+                    [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
+                                     animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
+                                     completion:^(BOOL finished) {
+                        [popinController didMoveToParentViewController:self];
+                        if (completion) {
+                            completion();
+                        }
+                    }];
+                }
             }
         } else {
             //Adding
