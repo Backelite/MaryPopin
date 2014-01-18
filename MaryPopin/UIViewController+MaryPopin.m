@@ -75,7 +75,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self addPopinToHierarchy:popinController];
             [popinController.view setFrame:popinFrame];
             
-            if ([popinController popinTransitionUsesDynamics]) {
+            if ([popinController popinTransitionUsesDynamics] && [self popinCanUseDynamics]) {
                 [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
             } else {
                 if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
@@ -150,7 +150,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self setDimmingView:nil];
         }];
         
-        if ([presentedPopin popinTransitionUsesDynamics]) {
+        if ([presentedPopin popinTransitionUsesDynamics] && [self popinCanUseDynamics]) {
             [self snapOutAnimationForPopinController:presentedPopin withDirection:presentedPopin.popinTransitionDirection completion:completion];
         } else {
             [UIView animateWithDuration:0.3
@@ -584,6 +584,11 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 - (BOOL)popinTransitionUsesDynamics
 {
     return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && @protocol(UIDynamicItem) != NULL;
+}
+
+- (BOOL)popinCanUseDynamics
+{
+    return (nil != NSClassFromString(@"UIDynamicBehavior"));
 }
 
 + (CGFloat)dampingValueForTransitionStyle:(BKTPopinTransitionStyle)transitionStyle

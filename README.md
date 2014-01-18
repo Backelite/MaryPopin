@@ -15,6 +15,7 @@ Well, your are right, but here are some strengths of this project :
 * Subtle paralax effect to fit well with iOS 7 guidelines
 * Automatic moves to respond to keyboard events
 * Completion blocks on present and dismiss transitions
+* iOS5/6/7 support
 
 Yes, you can say it, it is Supercalifragilisticexpialidocious!
 
@@ -31,6 +32,11 @@ that is why we name it a popin controller. And as it is implemented as a categor
 v 1.0
 
 * First public release
+
+v 1.1
+
+* iOS5&6 support
+
 
 ## Getting started
 ### The Pod way
@@ -96,8 +102,8 @@ By default, popin is centered in the parent controller view. But you can provide
 ### Sample project
 The sample project show how to present and dismiss a popin with different transition styles.
 
-## <a name="requirements"></a> Requirements
-MaryPopin requires iOS 7.0 and Xcode 5 as it uses UIKit Dynamics and motion effects.
+## Requirements
+MaryPopin requires Xcode 5 as it uses (optionaly) UIKit Dynamics and motion effects.
 
 ### ARC
 MaryPopin uses ARC.  
