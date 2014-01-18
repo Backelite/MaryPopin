@@ -24,8 +24,6 @@
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
-typedef void (^animationBlock)(void);
-
 CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 {
 	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
@@ -96,10 +94,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                     
                 }
                 else {
-                    [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle] animations:^{
-                        animationBlock animationBlock = [self inAnimationForPopinController:popinController toPosition:popinFrame];
-                        animationBlock();
-                    } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
+                                     animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
+                                     completion:^(BOOL finished) {
                         [popinController didMoveToParentViewController:self];
                         if (completion) {
                             completion();
