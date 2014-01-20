@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKTPopin2ControllerViewController : UIViewController
+#import "BKTPopinControllerViewController.h"
+
+@interface BKTPopin2ControllerViewController : BKTPopinControllerViewController
 
 @end
