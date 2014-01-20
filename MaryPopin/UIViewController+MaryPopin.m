@@ -54,7 +54,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         
         BKTPopinOption options = [popinController popinOptions];
         if (! (options & BKTPopinDisableAutoDismiss)) {
-            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.1]];
+            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
             UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentPopinController)];
             [dimmingView addGestureRecognizer:tapGesture];
         }
@@ -75,7 +75,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self addPopinToHierarchy:popinController];
             [popinController.view setFrame:popinFrame];
             
-            if ([popinController popinTransitionUsesDynamics]) {
+            if ([popinController popinTransitionUsesDynamics] ) {
                 [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
             } else {
                 if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
@@ -232,11 +232,11 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     if (NO == CGRectEqualToRect(preferedContainerRect, CGRectUnion(preferedContainerRect, popinPreferedFrame))) {
         //Resize popin frame to fit inside container rect
         if (CGRectGetHeight(popinPreferedFrame) >= CGRectGetHeight(preferedContainerRect)) {
-            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 40.0; //Standard 20px margins
+            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 40.0f; //Standard 20px margins
         }
         
         if (CGRectGetWidth(popinPreferedFrame) >= CGRectGetWidth(preferedContainerRect)) {
-            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 40.0; //Standard 20px margins
+            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 40.0f; //Standard 20px margins
         }
     }
     
@@ -583,7 +583,12 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (BOOL)popinTransitionUsesDynamics
 {
-    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && @protocol(UIDynamicItem) != NULL;
+    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && [self popinCanUseDynamics];
+}
+
+- (BOOL)popinCanUseDynamics
+{
+    return (nil != NSClassFromString(@"UIDynamicBehavior"));
 }
 
 + (CGFloat)dampingValueForTransitionStyle:(BKTPopinTransitionStyle)transitionStyle

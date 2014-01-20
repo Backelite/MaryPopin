@@ -23,6 +23,11 @@
 		2BDC280B185F0E2600627E9A /* UIViewController+MaryPopin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC280A185F0E2600627E9A /* UIViewController+MaryPopin.m */; };
 		2BDC280F185F106300627E9A /* BKTPopinControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */; };
 		2BDC2810185F106300627E9A /* BKTPopinControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */; };
+		C2505F60188B28B400FC969F /* BKTiPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2505F5F188B28B400FC969F /* BKTiPadViewController.m */; };
+		C2505F63188B293200FC969F /* BKTiPadDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2505F62188B293200FC969F /* BKTiPadDetailsViewController.m */; };
+		C2505F66188B29D500FC969F /* BKTPopin2ControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2505F65188B29D500FC969F /* BKTPopin2ControllerViewController.m */; };
+		C2505F68188B29E900FC969F /* BKTPopin2ControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2505F67188B29E900FC969F /* BKTPopin2ControllerViewController.xib */; };
+		C2ADB227188DC52D009EABDB /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB229188DC52D009EABDB /* Main_iPad.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +65,15 @@
 		2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTPopinControllerViewController.m; sourceTree = "<group>"; };
 		2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BKTPopinControllerViewController.xib; sourceTree = "<group>"; };
 		C23FCA09187E89DE000B7EC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C2505F5E188B28B400FC969F /* BKTiPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTiPadViewController.h; sourceTree = "<group>"; };
+		C2505F5F188B28B400FC969F /* BKTiPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTiPadViewController.m; sourceTree = "<group>"; };
+		C2505F61188B293200FC969F /* BKTiPadDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTiPadDetailsViewController.h; sourceTree = "<group>"; };
+		C2505F62188B293200FC969F /* BKTiPadDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTiPadDetailsViewController.m; sourceTree = "<group>"; };
+		C2505F64188B29D500FC969F /* BKTPopin2ControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTPopin2ControllerViewController.h; sourceTree = "<group>"; };
+		C2505F65188B29D500FC969F /* BKTPopin2ControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTPopin2ControllerViewController.m; sourceTree = "<group>"; };
+		C2505F67188B29E900FC969F /* BKTPopin2ControllerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BKTPopin2ControllerViewController.xib; sourceTree = "<group>"; };
+		C2ADB22D188DC7BE009EABDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		C2ADB22E188DC7F5009EABDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,16 +135,12 @@
 				2BDC2808185F0E1300627E9A /* MaryPopin */,
 				2BDC27E2185F0DE900627E9A /* BKTAppDelegate.h */,
 				2BDC27E3185F0DE900627E9A /* BKTAppDelegate.m */,
+				C2ADB229188DC52D009EABDB /* Main_iPad.storyboard */,
 				2BDC27E5185F0DE900627E9A /* Main.storyboard */,
-				2BDC27E8185F0DE900627E9A /* BKTViewController.h */,
-				2BDC27E9185F0DE900627E9A /* BKTViewController.m */,
+				C2505F5D188B268800FC969F /* iPad */,
+				C2505F5C188B267700FC969F /* iPhone */,
 				2BDC27EB185F0DE900627E9A /* Images.xcassets */,
 				2BDC27DA185F0DE900627E9A /* Supporting Files */,
-				2BDC280C185F106300627E9A /* BKTPopinControllerViewController.h */,
-				2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */,
-				2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */,
-				2B88EF26186F3D0300922387 /* BKTOptionCell.h */,
-				2B88EF27186F3D0300922387 /* BKTOptionCell.m */,
 			);
 			path = MaryPopinDemo;
 			sourceTree = "<group>";
@@ -153,6 +163,34 @@
 				2BDC280A185F0E2600627E9A /* UIViewController+MaryPopin.m */,
 			);
 			name = MaryPopin;
+			sourceTree = "<group>";
+		};
+		C2505F5C188B267700FC969F /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				2BDC27E8185F0DE900627E9A /* BKTViewController.h */,
+				2BDC27E9185F0DE900627E9A /* BKTViewController.m */,
+				2BDC280C185F106300627E9A /* BKTPopinControllerViewController.h */,
+				2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */,
+				2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */,
+				2B88EF26186F3D0300922387 /* BKTOptionCell.h */,
+				2B88EF27186F3D0300922387 /* BKTOptionCell.m */,
+			);
+			name = iPhone;
+			sourceTree = "<group>";
+		};
+		C2505F5D188B268800FC969F /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				C2505F5E188B28B400FC969F /* BKTiPadViewController.h */,
+				C2505F5F188B28B400FC969F /* BKTiPadViewController.m */,
+				C2505F61188B293200FC969F /* BKTiPadDetailsViewController.h */,
+				C2505F62188B293200FC969F /* BKTiPadDetailsViewController.m */,
+				C2505F64188B29D500FC969F /* BKTPopin2ControllerViewController.h */,
+				C2505F65188B29D500FC969F /* BKTPopin2ControllerViewController.m */,
+				C2505F67188B29E900FC969F /* BKTPopin2ControllerViewController.xib */,
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +272,8 @@
 			files = (
 				2BDC27EC185F0DE900627E9A /* Images.xcassets in Resources */,
 				2BDC27DE185F0DE900627E9A /* InfoPlist.strings in Resources */,
+				C2505F68188B29E900FC969F /* BKTPopin2ControllerViewController.xib in Resources */,
+				C2ADB227188DC52D009EABDB /* Main_iPad.storyboard in Resources */,
 				2BDC27E7185F0DE900627E9A /* Main.storyboard in Resources */,
 				2BDC2810185F106300627E9A /* BKTPopinControllerViewController.xib in Resources */,
 			);
@@ -255,8 +295,11 @@
 			files = (
 				2BDC27E4185F0DE900627E9A /* BKTAppDelegate.m in Sources */,
 				2BDC27E0185F0DE900627E9A /* main.m in Sources */,
+				C2505F60188B28B400FC969F /* BKTiPadViewController.m in Sources */,
 				2BDC280B185F0E2600627E9A /* UIViewController+MaryPopin.m in Sources */,
 				2BDC27EA185F0DE900627E9A /* BKTViewController.m in Sources */,
+				C2505F63188B293200FC969F /* BKTiPadDetailsViewController.m in Sources */,
+				C2505F66188B29D500FC969F /* BKTPopin2ControllerViewController.m in Sources */,
 				2B88EF28186F3D0300922387 /* BKTOptionCell.m in Sources */,
 				2BDC280F185F106300627E9A /* BKTPopinControllerViewController.m in Sources */,
 			);
@@ -295,6 +338,15 @@
 				C23FCA09187E89DE000B7EC0 /* en */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C2ADB229188DC52D009EABDB /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C2ADB22D188DC7BE009EABDB /* en */,
+				C2ADB22E188DC7F5009EABDB /* Base */,
+			);
+			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionDirection) {
  *  Options to configure popin behavior to user related events. The following options are compoundables.
  *  @since v1.0
  */
-typedef NS_ENUM(NSInteger, BKTPopinOption) {
+typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
     /**
      *  Default behaviour
      */
