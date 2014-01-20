@@ -29,6 +29,9 @@
                     <state key="normal" title="Close">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="closeButtonPressed:" destination="-2" eventType="touchUpInside" id="khB-Iu-3OM"/>
+                    </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="xTv-U2-khW">
                     <rect key="frame" x="102" y="144" width="97" height="30"/>

@@ -27,7 +27,7 @@
  *  Transition styles available when presenting popin view controllers.
  *  @since v1.0
  */
-typedef NS_ENUM(NSUInteger, BKTPopinTransitionStyle) {
+typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
     /**
      *  When the view controller is presented, its view slide in the parent view controller and slide out on dismiss
      */
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, BKTPopinTransitionStyle) {
  *  Transition direction when presenting popins. Default is BKTPopinTransitionDirectionBottom.
  *  @since v1.0
  */
-typedef NS_ENUM(NSUInteger, BKTPopinTransitionDirection) {
+typedef NS_ENUM(NSInteger, BKTPopinTransitionDirection) {
     /**
      *  Presentation transition will start from the bottom of the parent view. Respectively, dismiss transition will end to the bottom of the parent view.
      */
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSUInteger, BKTPopinTransitionDirection) {
  *  Options to configure popin behavior to user related events. The following options are compoundables.
  *  @since v1.0
  */
-typedef NS_OPTIONS(NSInteger, BKTPopinOption) {
+typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
     /**
      *  Default behaviour
      */
