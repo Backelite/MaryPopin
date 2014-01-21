@@ -51,6 +51,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return YES;
+}
+
 - (IBAction)presentPopinPressed:(id)sender
 {
     BKTPopinControllerViewController *popin = [[BKTPopinControllerViewController alloc] init];
