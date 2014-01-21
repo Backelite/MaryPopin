@@ -5,6 +5,8 @@ Pod::Spec.new do |s|
 
   s.description  = <<-DESC
                     MaryPopin is a category to present view controllers in a supercalifragilisticexpialidocious way.
+                    More precisely, it allows you to present modal-like view controllers with a custom size and a larger choice of transition.
+                    On iOS 7, it can use motion effects and UIKit Dynamics for even better looking popins.
                    DESC
 
   s.homepage     = "https://github.com/Backelite/MaryPopin"
