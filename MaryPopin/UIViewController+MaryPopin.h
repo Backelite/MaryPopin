@@ -94,7 +94,11 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
     /**
      *  Disable auto dismiss when touching outside of the popin view
      */
-    BKTPopinDisableAutoDismiss = 1 << 1
+    BKTPopinDisableAutoDismiss = 1 << 1,
+    /**
+     *  Set a background dimming view with a clear color. Default is a semi-transparent black background
+     */
+    BKTPopinDimmingViewStyleNone = 1 << 16,
 };
 
 /**

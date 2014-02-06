@@ -29,18 +29,22 @@ that is why we name it a popin controller. And as it is implemented as a categor
 
 ## Changes
 
-v 1.0
+v 1.2
 
-* First public release
-
-v 1.1
-
-* Support for iOS 5 & 6
+* Added an option to remove coupling between background view and auto-dismiss option
+* Fixed an issue causing background view to disappear when chaining multiple popins
 
 v 1.1.1
 
 * Code refactoring
 
+v 1.1
+
+* Support for iOS 5 & 6
+
+v 1.0
+
+* First public release
 
 ## Getting started
 ### The Pod way
@@ -120,4 +124,4 @@ Contributions for bug fixing or improvements are welcomed. Feel free to submit a
 ## Licence
 MaryPopin is available under the MIT license. See the LICENSE file for more info.
 
-[![Analytics](https://ga-beacon.appspot.com/UA-44164731-2/mary-popin/readme)](https://github.com/igrigorik/ga-beacon?pixel)
+[![Analytics](https://ga-beacon.appspot.com/UA-44164731-2/mary-popin/readme?pixel)](https://github.com/igrigorik/ga-beacon)

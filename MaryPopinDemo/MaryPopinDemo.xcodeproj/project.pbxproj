@@ -17,9 +17,6 @@
 		2BDC27E7185F0DE900627E9A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BDC27E5185F0DE900627E9A /* Main_iPhone.storyboard */; };
 		2BDC27EA185F0DE900627E9A /* BKTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC27E9185F0DE900627E9A /* BKTViewController.m */; };
 		2BDC27EC185F0DE900627E9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BDC27EB185F0DE900627E9A /* Images.xcassets */; };
-		2BDC27F3185F0DE900627E9A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27F2185F0DE900627E9A /* XCTest.framework */; };
-		2BDC27F4185F0DE900627E9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27D3185F0DE900627E9A /* Foundation.framework */; };
-		2BDC27F5185F0DE900627E9A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDC27D7185F0DE900627E9A /* UIKit.framework */; };
 		2BDC280B185F0E2600627E9A /* UIViewController+MaryPopin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC280A185F0E2600627E9A /* UIViewController+MaryPopin.m */; };
 		2BDC280F185F106300627E9A /* BKTPopinControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC280D185F106300627E9A /* BKTPopinControllerViewController.m */; };
 		2BDC2810185F106300627E9A /* BKTPopinControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2BDC280E185F106300627E9A /* BKTPopinControllerViewController.xib */; };
@@ -29,16 +26,6 @@
 		C2505F68188B29E900FC969F /* BKTPopin2ControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2505F67188B29E900FC969F /* BKTPopin2ControllerViewController.xib */; };
 		C2ADB227188DC52D009EABDB /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB229188DC52D009EABDB /* Main_iPad.storyboard */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		2BDC27F6185F0DE900627E9A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2BDC27C8185F0DE900627E9A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2BDC27CF185F0DE900627E9A;
-			remoteInfo = MaryPopinDemo;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2B88EF26186F3D0300922387 /* BKTOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTOptionCell.h; sourceTree = "<group>"; };
@@ -56,7 +43,6 @@
 		2BDC27E8185F0DE900627E9A /* BKTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BKTViewController.h; sourceTree = "<group>"; };
 		2BDC27E9185F0DE900627E9A /* BKTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BKTViewController.m; sourceTree = "<group>"; };
 		2BDC27EB185F0DE900627E9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2BDC27F1185F0DE900627E9A /* MaryPopinDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaryPopinDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BDC27F2185F0DE900627E9A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		2BDC2809185F0E2600627E9A /* UIViewController+MaryPopin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+MaryPopin.h"; path = "../MaryPopin/UIViewController+MaryPopin.h"; sourceTree = SOURCE_ROOT; };
 		2BDC280A185F0E2600627E9A /* UIViewController+MaryPopin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+MaryPopin.m"; path = "../MaryPopin/UIViewController+MaryPopin.m"; sourceTree = SOURCE_ROOT; };
@@ -85,16 +71,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2BDC27EE185F0DE900627E9A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2BDC27F3185F0DE900627E9A /* XCTest.framework in Frameworks */,
-				2BDC27F5185F0DE900627E9A /* UIKit.framework in Frameworks */,
-				2BDC27F4185F0DE900627E9A /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,7 +87,6 @@
 			isa = PBXGroup;
 			children = (
 				2BDC27D0185F0DE900627E9A /* MaryPopinDemo.app */,
-				2BDC27F1185F0DE900627E9A /* MaryPopinDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,24 +186,6 @@
 			productReference = 2BDC27D0185F0DE900627E9A /* MaryPopinDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2BDC27F0185F0DE900627E9A /* MaryPopinDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2BDC2805185F0DE900627E9A /* Build configuration list for PBXNativeTarget "MaryPopinDemoTests" */;
-			buildPhases = (
-				2BDC27ED185F0DE900627E9A /* Sources */,
-				2BDC27EE185F0DE900627E9A /* Frameworks */,
-				2BDC27EF185F0DE900627E9A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2BDC27F7185F0DE900627E9A /* PBXTargetDependency */,
-			);
-			name = MaryPopinDemoTests;
-			productName = MaryPopinDemoTests;
-			productReference = 2BDC27F1185F0DE900627E9A /* MaryPopinDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -238,11 +195,6 @@
 				CLASSPREFIX = BKT;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Backelite;
-				TargetAttributes = {
-					2BDC27F0185F0DE900627E9A = {
-						TestTargetID = 2BDC27CF185F0DE900627E9A;
-					};
-				};
 			};
 			buildConfigurationList = 2BDC27CB185F0DE900627E9A /* Build configuration list for PBXProject "MaryPopinDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -258,7 +210,6 @@
 			projectRoot = "";
 			targets = (
 				2BDC27CF185F0DE900627E9A /* MaryPopinDemo */,
-				2BDC27F0185F0DE900627E9A /* MaryPopinDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -274,13 +225,6 @@
 				C2ADB227188DC52D009EABDB /* Main_iPad.storyboard in Resources */,
 				2BDC27E7185F0DE900627E9A /* Main_iPhone.storyboard in Resources */,
 				2BDC2810185F106300627E9A /* BKTPopinControllerViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2BDC27EF185F0DE900627E9A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,22 +247,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2BDC27ED185F0DE900627E9A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2BDC27F7185F0DE900627E9A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2BDC27CF185F0DE900627E9A /* MaryPopinDemo */;
-			targetProxy = 2BDC27F6185F0DE900627E9A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2BDC27DC185F0DE900627E9A /* InfoPlist.strings */ = {
@@ -450,48 +379,6 @@
 			};
 			name = Release;
 		};
-		2BDC2806185F0DE900627E9A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MaryPopinDemo.app/MaryPopinDemo";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MaryPopinDemo/MaryPopinDemo-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "MaryPopinDemoTests/MaryPopinDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		2BDC2807185F0DE900627E9A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MaryPopinDemo.app/MaryPopinDemo";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MaryPopinDemo/MaryPopinDemo-Prefix.pch";
-				INFOPLIST_FILE = "MaryPopinDemoTests/MaryPopinDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -509,15 +396,6 @@
 			buildConfigurations = (
 				2BDC2803185F0DE900627E9A /* Debug */,
 				2BDC2804185F0DE900627E9A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2BDC2805185F0DE900627E9A /* Build configuration list for PBXNativeTarget "MaryPopinDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2BDC2806185F0DE900627E9A /* Debug */,
-				2BDC2807185F0DE900627E9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

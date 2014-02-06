@@ -35,34 +35,13 @@
     return YES;
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-
 - (IBAction)presentPopinPressed:(id)sender
 {
     BKTPopin2ControllerViewController *popin = [[BKTPopin2ControllerViewController alloc] init];
-    [popin setPopinOptions:BKTPopinDefault];
+    //Disable auto dismiss and removed semi-transparent background
+    [popin setPopinOptions:BKTPopinDisableAutoDismiss|BKTPopinDimmingViewStyleNone];
+    
+    //Configure transition direction
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [self presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
