@@ -1,10 +1,12 @@
 Pod::Spec.new do |s|
   s.name         = "MaryPopin"
-  s.version      = "1.1.1"
+  s.version      = "1.2"
   s.summary      = "Category to display modal-like view controllers with more options"
 
   s.description  = <<-DESC
                     MaryPopin is a category to present view controllers in a supercalifragilisticexpialidocious way.
+                    More precisely, it allows you to present modal-like view controllers with a custom size and a larger choice of transitions.
+                    On iOS 7, it can use motion effects and UIKit Dynamics for even better looking popins.
                    DESC
 
   s.homepage     = "https://github.com/Backelite/MaryPopin"
@@ -15,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '5.0'
 
-  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :tag => "1.1.1" }
+  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :tag => "1.2" }
 
   s.source_files  = 'MaryPopin/**/*.{h,m}'
 
