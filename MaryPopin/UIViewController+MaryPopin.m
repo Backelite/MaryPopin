@@ -54,9 +54,14 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         
         BKTPopinOption options = [popinController popinOptions];
         if (! (options & BKTPopinDisableAutoDismiss)) {
-            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
             UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentPopinController)];
             [dimmingView addGestureRecognizer:tapGesture];
+        }
+        
+        if (options & BKTPopinDimmingViewStyleNone) {
+            [dimmingView setBackgroundColor:[UIColor clearColor]];
+        } else {
+            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
         }
         
         [self setDimmingView:dimmingView];
