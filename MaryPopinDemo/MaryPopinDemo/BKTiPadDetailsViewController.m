@@ -59,7 +59,6 @@
 - (IBAction)presentPopinPressed:(id)sender
 {
     BKTPopinControllerViewController *popin = [[BKTPopinControllerViewController alloc] init];
-    [popin setPopinOptions:BKTPopinDefault];
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [self presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
