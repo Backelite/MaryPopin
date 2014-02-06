@@ -146,8 +146,10 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             self.dimmingView.alpha = 0.0f;
         } completion:^(BOOL finished) {
             //Removing background
-            [self.dimmingView removeFromSuperview];
-            [self setDimmingView:nil];
+            if (self.presentedPopinViewController == nil) {
+                [self.dimmingView removeFromSuperview];
+                [self setDimmingView:nil];
+            }
         }];
         
         if ([presentedPopin popinTransitionUsesDynamics]) {
