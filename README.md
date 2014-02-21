@@ -108,7 +108,11 @@ By default, popin is centered in the parent controller view. But you can provide
 ```
 
 ### Sample project
-The sample project show how to present and dismiss a popin with different transition styles.
+The sample project show how to present and dismiss a popin with different transition styles. 
+
+If you are using CocoaPods in version 0.29 or better, you can quickly run the demo project with the following command line :
+
+	pod try MaryPopin
 
 ## Requirements
 MaryPopin requires Xcode 5 as it uses (optionaly) UIKit Dynamics and motion effects. You can use iOS 5 as a target deployment version. Note that some transition styles are not supported under iOS 7 and will be replaced by the default transition style.
