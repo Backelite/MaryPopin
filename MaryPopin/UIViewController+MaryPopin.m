@@ -425,7 +425,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
 {
-    objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (UIView *)dimmingView
