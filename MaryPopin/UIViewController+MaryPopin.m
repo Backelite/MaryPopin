@@ -407,6 +407,27 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+{
+    objc_setAssociatedObject(self, @selector(popinCustomInAnimation),  popinCustomInAnimation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
+- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+{
+    objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 - (UIView *)dimmingView
 {
     return objc_getAssociatedObject(self, _cmd);
@@ -442,6 +463,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomInAnimationForPopinController:popinController toPosition:finalFrame];
+        case BKTPopinTransitionStyleCustom:
+            if ([popinController popinCustomInAnimation])
+                return [self customInAnimationForPopinController:popinController toPosition:finalFrame withDirection:direction];
         default:
             return [self alphaInAnimationForPopinController:popinController toPosition:finalFrame];
     }
@@ -460,6 +484,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomOutAnimationForPopinController:popinController];
+        case BKTPopinTransitionStyleCustom:
+            if ([popinController popinCustomOutAnimation])
+                return [self customOutAnimationForPopinController:popinController withDirection:direction];
         default:
             return [self alphaOutAnimationForPopinController:popinController];
     }
@@ -586,11 +613,39 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     return NULL;
 }
 
+
+- (void (^)(void))customInAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame withDirection:(BKTPopinTransitionDirection)direction
+{
+    CGRect initialFrame = [self animationFrameForPopinController:popinController margin:0.0f];
+    popinController.view.frame = initialFrame;
+    
+    void (^animation)(void) = ^{
+
+        popinController.popinCustomInAnimation(popinController,initialFrame,finalFrame);
+        
+    };
+    
+    return animation;
+}
+- (void (^)(void))customOutAnimationForPopinController:(UIViewController *)popinController withDirection:(BKTPopinTransitionDirection)direction
+{
+    CGRect initialFrame = popinController.view.frame;
+    CGRect finalFrame = [self animationFrameForPopinController:popinController margin:0.0f];
+    
+    //Change properties values
+    void (^animation)(void) = ^{
+        
+        popinController.popinCustomOutAnimation(popinController,initialFrame,finalFrame);
+        
+    };
+    return animation;
+}
+
 #pragma mark - Dynamic transition helper methods
 
 - (BOOL)popinTransitionUsesDynamics
 {
-    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && [self popinCanUseDynamics];
+    return self.popinTransitionStyle == BKTPopinTransitionStyleSnap && [self popinCanUseDynamics];
 }
 
 - (BOOL)popinCanUseDynamics

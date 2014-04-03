@@ -56,6 +56,26 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
+    
+    if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
+    {
+        [popin setPopinCustomInAnimation:^(UIViewController *popInController, CGRect initialFrame, CGRect finalFrame) {
+          
+            /*
+            CGFloat y = self.view.center.y;
+            CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position.y"];
+            animation.values = @[@(y), @(y + 20), @(y - 10), @(y)];
+            animation.keyTimes = @[@(0), @(0.5), @(0.75), @(1)];
+            animation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut], [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear], [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+            animation.duration = 0.4;
+            [popInController.view.layer addAnimation:animation forKey:@"dropdown"];
+            */
+            
+            popInController.view.frame = finalFrame;
+            
+        }];
+    }
+    
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [self.navigationController presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
