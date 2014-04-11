@@ -23,17 +23,6 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_OPTIONS(NSInteger, BKTPopinAlignementOption) {
-    BKTPopinAlignementOptionUp          = 1 << 0,
-    BKTPopinAlignementOptionLeft        = 1 << 1,
-    BKTPopinAlignementOptionDown        = 1 << 2,
-    BKTPopinAlignementOptionRight       = 1 << 3,
-    BKTPopinAlignementOptionCentered =  (BKTPopinAlignementOptionUp |
-                                         BKTPopinAlignementOptionLeft |
-                                         BKTPopinAlignementOptionDown |
-                                         BKTPopinAlignementOptionRight)
-};
-
 /**
  *  Transition styles available when presenting popin view controllers.
  *  @since v1.0
@@ -251,22 +240,5 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  *  @since v1.0
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
-
-/**
- *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
- *
- *  @return The BKTPopinAlignementOption values as a bit field.
- *  @see -setPopinAlignement:
- *  @since v1.2
- */
-- (BKTPopinAlignementOption)popinAlignement;
-
-/**
- *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
- *
- *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
- *  @since v1.2
- */
-- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement;
 
 @end
