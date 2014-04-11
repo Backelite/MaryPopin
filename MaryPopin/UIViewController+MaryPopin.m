@@ -24,12 +24,79 @@
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
-CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
+#define kMaryPopinStandartMargin 18.0f
+
+CG_INLINE CGRect    BkRectCenterInRect(CGRect myRect, CGRect refRect)
 {
 	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
 	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height / 2.0 - myRect.size.height / 2.0);
 	return myRect;
 }
+
+CG_INLINE CGRect    BkRectAlignLeftInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = 0.0f;
+	myRect.origin.y = refRect.origin.y;
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignUpInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x;
+	myRect.origin.y = 0.0f;
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignDownInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x;
+	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height - myRect.size.height);
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignRightInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width - myRect.size.width);
+	myRect.origin.y = refRect.origin.y;
+	return myRect;
+}
+
+/*
+ BKTPopinAlignementOptionUp          = 1 << 0,
+ BKTPopinAlignementOptionLeft        = 1 << 1,
+ BKTPopinAlignementOptionDown        = 1 << 2,
+ BKTPopinAlignementOptionRight       = 1 << 3,
+ */
+
+CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRect,BKTPopinAlignementOption option)
+{
+    switch (option) {
+        case BKTPopinAlignementOptionCentered:
+            return BkRectCenterInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionUp:
+            return BkRectAlignUpInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionLeft:
+            return BkRectAlignLeftInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionDown:
+            return BkRectAlignDownInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionRight:
+            return BkRectAlignRightInRect(myRect,refRect);
+            break;
+            
+        default:
+            return BkRectCenterInRect(myRect,refRect);
+            break;
+    }
+}
+
 
 @implementation UIViewController (MaryPopin)
 
@@ -232,16 +299,17 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     if (NO == CGRectEqualToRect(preferedContainerRect, CGRectUnion(preferedContainerRect, popinPreferedFrame))) {
         //Resize popin frame to fit inside container rect
         if (CGRectGetHeight(popinPreferedFrame) >= CGRectGetHeight(preferedContainerRect)) {
-            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 40.0f; //Standard 20px margins
+            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 2*kMaryPopinStandartMargin; //Standard margins
         }
         
         if (CGRectGetWidth(popinPreferedFrame) >= CGRectGetWidth(preferedContainerRect)) {
-            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 40.0f; //Standard 20px margins
+            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 2*kMaryPopinStandartMargin; //Standard margins
         }
     }
     
-    //Center popin in container
-    popinPreferedFrame = BkRectCenterInRect(popinPreferedFrame, preferedContainerRect);
+    //Align popin in container rect
+    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[self popinAlignement]);
+    
     //Save popin frame in case of displacement with keyboard
     [popinViewController setOriginalPopinFrame:popinPreferedFrame];
     
@@ -398,6 +466,20 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 - (void)setPopinOptions:(BKTPopinOption)popinOptions
 {
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BKTPopinAlignementOption)popinAlignement
+{
+    id storedValue = objc_getAssociatedObject(self, _cmd);
+    if (nil == storedValue) {
+        return BKTPopinAlignementOptionDown;
+    }
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+
+- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement
+{
+    objc_setAssociatedObject(self, @selector(popinAlignement),  [NSNumber numberWithInt:popinAlignement], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *)dimmingView
