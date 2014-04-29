@@ -21,15 +21,83 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+@import Accelerate;
+
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
-CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
+//Standard margin value on iOS
+#define kMaryPopinStandardMargin 20.0f
+
+CG_INLINE CGRect    BkRectCenterInRect(CGRect myRect, CGRect refRect)
 {
 	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
 	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height / 2.0 - myRect.size.height / 2.0);
 	return myRect;
 }
+
+CG_INLINE CGRect    BkRectAlignLeftInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = 0.0f;
+	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height / 2.0 - myRect.size.height / 2.0);
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignUpInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
+	myRect.origin.y = 0.0f;
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignDownInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width / 2.0  - myRect.size.width / 2.0);
+	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height - myRect.size.height);
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectAlignRightInRect(CGRect myRect, CGRect refRect)
+{
+	myRect.origin.x = refRect.origin.x + roundf(refRect.size.width - myRect.size.width);
+	myRect.origin.y = refRect.origin.y + roundf(refRect.size.height / 2.0 - myRect.size.height / 2.0);
+	return myRect;
+}
+
+CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRect,BKTPopinAlignementOption option)
+{
+    switch (option) {
+        case BKTPopinAlignementOptionCentered:
+            return BkRectCenterInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionUp:
+            return BkRectAlignUpInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionLeft:
+            return BkRectAlignLeftInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionDown:
+            return BkRectAlignDownInRect(myRect,refRect);
+            break;
+            
+        case BKTPopinAlignementOptionRight:
+            return BkRectAlignRightInRect(myRect,refRect);
+            break;
+            
+        default:
+            return BkRectCenterInRect(myRect,refRect);
+            break;
+    }
+}
+
+@interface UIImage (MaryPopinBlur)
+
+- (UIImage *)marypopin_applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
+
+@end
 
 @implementation UIViewController (MaryPopin)
 
@@ -60,13 +128,16 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         
         if (options & BKTPopinDimmingViewStyleNone) {
             [dimmingView setBackgroundColor:[UIColor clearColor]];
+        } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            UIImage *bgImage = [self createImageFromView:self.view];
+            bgImage = [bgImage marypopin_applyBlurWithRadius:20.0 tintColor:[UIColor clearColor] saturationDeltaFactor:1.8 maskImage:nil];
+            UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
+            [dimmingView addSubview:bgImageView];
         } else {
             [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
         }
         
         [self setDimmingView:dimmingView];
-        
-        CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
         
         if (YES == animated) {
             dimmingView.alpha = 0.0f;
@@ -77,7 +148,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                 dimmingView.alpha = 1.0f;
             }];
             
+            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:YES];
             [self addPopinToHierarchy:popinController];
+            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             [popinController.view setFrame:popinFrame];
             
             if ([popinController popinTransitionUsesDynamics] ) {
@@ -92,6 +165,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                  animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                  completion:^(BOOL finished) {
                                      [popinController didMoveToParentViewController:self];
+                                     [self forwardAppearanceEndingIfNeeded:popinController];
                                      if (completion) {
                                          completion();
                                      }
@@ -103,6 +177,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                      animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                      completion:^(BOOL finished) {
                         [popinController didMoveToParentViewController:self];
+                        [self forwardAppearanceEndingIfNeeded:popinController];
                         if (completion) {
                             completion();
                         }
@@ -114,9 +189,12 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self.view addSubview:dimmingView];
             
             //Adding controller
-            popinController.view.frame = popinFrame;
+            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:NO];
             [self addPopinToHierarchy:popinController];
+            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
+            popinController.view.frame = popinFrame;
             [popinController didMoveToParentViewController:self];
+            [self forwardAppearanceEndingIfNeeded:popinController];
             if (completion) {
                 completion();
             }
@@ -160,6 +238,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         if ([presentedPopin popinTransitionUsesDynamics]) {
             [self snapOutAnimationForPopinController:presentedPopin withDirection:presentedPopin.popinTransitionDirection completion:completion];
         } else {
+            [self forwardAppearanceBeginningIfNeeded:presentedPopin appearing:NO animated:YES];
             [UIView animateWithDuration:0.3
                                   delay:0 options:UIViewAnimationOptionCurveEaseIn
                              animations:[self outAnimationForPopinController:presentedPopin]
@@ -168,11 +247,12 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
                                  if (completion) {
                                      completion();
                                  }
+                                 [self forwardAppearanceEndingIfNeeded:presentedPopin];
                              }];
         }
     } else {
+        [self forwardAppearanceBeginningIfNeeded:presentedPopin appearing:NO animated:NO];
         [self removePopinFromHierarchy:presentedPopin];
-        
         //Removing background
         [self.dimmingView removeFromSuperview];
         [self setDimmingView:nil];
@@ -180,6 +260,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         if (completion) {
             completion();
         }
+        [self forwardAppearanceEndingIfNeeded:presentedPopin];
     }
 }
 
@@ -239,16 +320,17 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     if (NO == CGRectEqualToRect(preferedContainerRect, CGRectUnion(preferedContainerRect, popinPreferedFrame))) {
         //Resize popin frame to fit inside container rect
         if (CGRectGetHeight(popinPreferedFrame) >= CGRectGetHeight(preferedContainerRect)) {
-            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 40.0f; //Standard 20px margins
+            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - kMaryPopinStandardMargin * 2; //Standard margins
         }
         
         if (CGRectGetWidth(popinPreferedFrame) >= CGRectGetWidth(preferedContainerRect)) {
-            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 40.0f; //Standard 20px margins
+            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - kMaryPopinStandardMargin * 2; //Standard margins
         }
     }
     
-    //Center popin in container
-    popinPreferedFrame = BkRectCenterInRect(popinPreferedFrame, preferedContainerRect);
+    //Align popin in container rect
+    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
+    
     //Save popin frame in case of displacement with keyboard
     [popinViewController setOriginalPopinFrame:popinPreferedFrame];
     
@@ -261,11 +343,27 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     CGRect frame = popinController.view.frame;
     if (direction == BKTPopinTransitionDirectionTop || direction == BKTPopinTransitionDirectionBottom) {
         CGFloat multiplier = (direction == BKTPopinTransitionDirectionBottom) ? 1.0 : -1.0;
-        CGFloat yOffset = (CGRectGetHeight(self.view.frame) - CGRectGetMinY(popinController.view.frame) + margin) * multiplier;
+        CGFloat popinPosition = 0.0f;
+        
+        if (direction == BKTPopinTransitionDirectionTop) {
+            popinPosition = CGRectGetMaxY(frame);
+        } else if (direction == BKTPopinTransitionDirectionBottom) {
+            popinPosition = CGRectGetHeight(self.view.frame) - CGRectGetMinY(frame);
+        }
+        
+        CGFloat yOffset = (popinPosition + margin) * multiplier;
         frame = CGRectOffset(frame, 0.0f, yOffset);
     } else {
         CGFloat multiplier = (direction == BKTPopinTransitionDirectionRight) ? 1.0 : -1.0;
-        CGFloat xOffset = (CGRectGetWidth(self.view.frame) - CGRectGetMinX(popinController.view.frame) + margin) * multiplier;
+        CGFloat popinPosition = 0.0f;
+        
+        if (direction == BKTPopinTransitionDirectionLeft) {
+            popinPosition = CGRectGetMaxX(frame);
+        } else if (direction == BKTPopinTransitionDirectionRight) {
+            popinPosition = CGRectGetWidth(self.view.frame) - CGRectGetMinX(frame);
+        }
+        
+        CGFloat xOffset = (popinPosition + margin) * multiplier;
         frame = CGRectOffset(frame, xOffset, 0.0f);
     }
     return frame;
@@ -287,14 +385,14 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (void)addPopinToHierarchy:(UIViewController *)popinController
 {
+    //Add child with animation
+    [self addChildViewController:popinController];
+    
     //Remove autoresizing mask
     [popinController.view setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|
      UIViewAutoresizingFlexibleRightMargin|
      UIViewAutoresizingFlexibleTopMargin|
      UIViewAutoresizingFlexibleBottomMargin];
-    
-    //Add child with animation
-    [self addChildViewController:popinController];
     
     //Add motion effect
     [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
@@ -309,6 +407,20 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     //Set popin hierarchy accessors
     [self setPresentedPopinViewController:popinController];
     [popinController setPresentingPopinViewController:self];
+}
+
+- (void)forwardAppearanceBeginningIfNeeded:(UIViewController *)popinController appearing:(BOOL)isAppearing animated:(BOOL)animated
+{
+    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+        [popinController beginAppearanceTransition:isAppearing animated:animated];
+    }
+}
+
+- (void)forwardAppearanceEndingIfNeeded:(UIViewController *)popinController
+{
+    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+        [popinController endAppearanceTransition];
+    }
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
@@ -407,6 +519,41 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+{
+    objc_setAssociatedObject(self, @selector(popinCustomInAnimation),  popinCustomInAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+{
+    objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (BKTPopinAlignementOption)popinAlignment
+{
+    id storedValue = objc_getAssociatedObject(self, _cmd);
+    if (nil == storedValue) {
+        return BKTPopinAlignementOptionDown;
+    }
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+
+- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment
+{
+    objc_setAssociatedObject(self, @selector(popinAlignment),  [NSNumber numberWithInt:popinAlignment], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 - (UIView *)dimmingView
 {
     return objc_getAssociatedObject(self, _cmd);
@@ -442,6 +589,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomInAnimationForPopinController:popinController toPosition:finalFrame];
+        case BKTPopinTransitionStyleCustom:
+            if ([popinController popinCustomInAnimation])
+                return [self customInAnimationForPopinController:popinController toPosition:finalFrame withDirection:direction];
         default:
             return [self alphaInAnimationForPopinController:popinController toPosition:finalFrame];
     }
@@ -460,6 +610,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         case BKTPopinTransitionStyleSpringyZoom:
         case BKTPopinTransitionStyleZoom:
             return [self zoomOutAnimationForPopinController:popinController];
+        case BKTPopinTransitionStyleCustom:
+            if ([popinController popinCustomOutAnimation])
+                return [self customOutAnimationForPopinController:popinController withDirection:direction];
         default:
             return [self alphaOutAnimationForPopinController:popinController];
     }
@@ -547,6 +700,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     __weak UISnapBehavior *weakSnap = snap;
     snap.action = ^ {
         if (CGRectEqualToRect(popinController.view.frame, finalFrame)) {
+            [self forwardAppearanceEndingIfNeeded:popinController];
             if (completion) {
                 completion();
             }
@@ -579,18 +733,49 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             if (completion) {
                 completion();
             }
+            [self forwardAppearanceEndingIfNeeded:popinController];
         }
     };
+    
+    [self forwardAppearanceBeginningIfNeeded:popinController appearing:NO animated:YES];
     [self.animator addBehavior:snap];
     
     return NULL;
+}
+
+
+- (void (^)(void))customInAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame withDirection:(BKTPopinTransitionDirection)direction
+{
+    CGRect initialFrame = [self animationFrameForPopinController:popinController margin:0.0f];
+    popinController.view.frame = initialFrame;
+    
+    void (^animation)(void) = ^{
+
+        popinController.popinCustomInAnimation(popinController,initialFrame,finalFrame);
+        
+    };
+    
+    return animation;
+}
+- (void (^)(void))customOutAnimationForPopinController:(UIViewController *)popinController withDirection:(BKTPopinTransitionDirection)direction
+{
+    CGRect initialFrame = popinController.view.frame;
+    CGRect finalFrame = [self animationFrameForPopinController:popinController margin:0.0f];
+    
+    //Change properties values
+    void (^animation)(void) = ^{
+        
+        popinController.popinCustomOutAnimation(popinController,initialFrame,finalFrame);
+        
+    };
+    return animation;
 }
 
 #pragma mark - Dynamic transition helper methods
 
 - (BOOL)popinTransitionUsesDynamics
 {
-    return self.popinTransitionStyle >= BKTPopinTransitionStyleSnap && [self popinCanUseDynamics];
+    return self.popinTransitionStyle == BKTPopinTransitionStyleSnap && [self popinCanUseDynamics];
 }
 
 - (BOOL)popinCanUseDynamics
@@ -630,6 +815,152 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             break;
     }
     return animationDuration;
+}
+
+#pragma mark - Helpers
+
+- (UIImage *)createImageFromView:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
+@end
+
+#pragma mark - UImage Category for Blur
+
+@implementation UIImage (MaryPopinBlur)
+
+- (UIImage *)marypopin_applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage
+{
+    // Check pre-conditions.
+    if (self.size.width < 1 || self.size.height < 1) {
+        NSLog (@"*** error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
+        return nil;
+    }
+    if (!self.CGImage) {
+        NSLog (@"*** error: image must be backed by a CGImage: %@", self);
+        return nil;
+    }
+    if (maskImage && !maskImage.CGImage) {
+        NSLog (@"*** error: maskImage must be backed by a CGImage: %@", maskImage);
+        return nil;
+    }
+    
+    CGRect imageRect = { CGPointZero, self.size };
+    UIImage *effectImage = self;
+    
+    BOOL hasBlur = blurRadius > __FLT_EPSILON__;
+    BOOL hasSaturationChange = fabs(saturationDeltaFactor - 1.) > __FLT_EPSILON__;
+    if (hasBlur || hasSaturationChange) {
+        UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+        CGContextRef effectInContext = UIGraphicsGetCurrentContext();
+        CGContextScaleCTM(effectInContext, 1.0, -1.0);
+        CGContextTranslateCTM(effectInContext, 0, -self.size.height);
+        CGContextDrawImage(effectInContext, imageRect, self.CGImage);
+        
+        vImage_Buffer effectInBuffer;
+        effectInBuffer.data     = CGBitmapContextGetData(effectInContext);
+        effectInBuffer.width    = CGBitmapContextGetWidth(effectInContext);
+        effectInBuffer.height   = CGBitmapContextGetHeight(effectInContext);
+        effectInBuffer.rowBytes = CGBitmapContextGetBytesPerRow(effectInContext);
+        
+        UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+        CGContextRef effectOutContext = UIGraphicsGetCurrentContext();
+        vImage_Buffer effectOutBuffer;
+        effectOutBuffer.data     = CGBitmapContextGetData(effectOutContext);
+        effectOutBuffer.width    = CGBitmapContextGetWidth(effectOutContext);
+        effectOutBuffer.height   = CGBitmapContextGetHeight(effectOutContext);
+        effectOutBuffer.rowBytes = CGBitmapContextGetBytesPerRow(effectOutContext);
+        
+        if (hasBlur) {
+            // A description of how to compute the box kernel width from the Gaussian
+            // radius (aka standard deviation) appears in the SVG spec:
+            // http://www.w3.org/TR/SVG/filters.html#feGaussianBlurElement
+            //
+            // For larger values of 's' (s >= 2.0), an approximation can be used: Three
+            // successive box-blurs build a piece-wise quadratic convolution kernel, which
+            // approximates the Gaussian kernel to within roughly 3%.
+            //
+            // let d = floor(s * 3*sqrt(2*pi)/4 + 0.5)
+            //
+            // ... if d is odd, use three box-blurs of size 'd', centered on the output pixel.
+            //
+            CGFloat inputRadius = blurRadius * [[UIScreen mainScreen] scale];
+            uint32_t radius = floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
+            if (radius % 2 != 1) {
+                radius += 1; // force radius to be odd so that the three box-blur methodology works.
+            }
+            vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, radius, radius, 0, kvImageEdgeExtend);
+            vImageBoxConvolve_ARGB8888(&effectOutBuffer, &effectInBuffer, NULL, 0, 0, radius, radius, 0, kvImageEdgeExtend);
+            vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, radius, radius, 0, kvImageEdgeExtend);
+        }
+        BOOL effectImageBuffersAreSwapped = NO;
+        if (hasSaturationChange) {
+            CGFloat s = saturationDeltaFactor;
+            CGFloat floatingPointSaturationMatrix[] = {
+                0.0722 + 0.9278 * s,  0.0722 - 0.0722 * s,  0.0722 - 0.0722 * s,  0,
+                0.7152 - 0.7152 * s,  0.7152 + 0.2848 * s,  0.7152 - 0.7152 * s,  0,
+                0.2126 - 0.2126 * s,  0.2126 - 0.2126 * s,  0.2126 + 0.7873 * s,  0,
+                0,                    0,                    0,  1,
+            };
+            const int32_t divisor = 256;
+            NSUInteger matrixSize = sizeof(floatingPointSaturationMatrix)/sizeof(floatingPointSaturationMatrix[0]);
+            int16_t saturationMatrix[matrixSize];
+            for (NSUInteger i = 0; i < matrixSize; ++i) {
+                saturationMatrix[i] = (int16_t)roundf(floatingPointSaturationMatrix[i] * divisor);
+            }
+            if (hasBlur) {
+                vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
+                effectImageBuffersAreSwapped = YES;
+            }
+            else {
+                vImageMatrixMultiply_ARGB8888(&effectInBuffer, &effectOutBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
+            }
+        }
+        if (!effectImageBuffersAreSwapped)
+            effectImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        if (effectImageBuffersAreSwapped)
+            effectImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    
+    // Set up output context.
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+    CGContextRef outputContext = UIGraphicsGetCurrentContext();
+    CGContextScaleCTM(outputContext, 1.0, -1.0);
+    CGContextTranslateCTM(outputContext, 0, -self.size.height);
+    
+    // Draw base image.
+    CGContextDrawImage(outputContext, imageRect, self.CGImage);
+    
+    // Draw effect image.
+    if (hasBlur) {
+        CGContextSaveGState(outputContext);
+        if (maskImage) {
+            CGContextClipToMask(outputContext, imageRect, maskImage.CGImage);
+        }
+        CGContextDrawImage(outputContext, imageRect, effectImage.CGImage);
+        CGContextRestoreGState(outputContext);
+    }
+    
+    // Add in color tint.
+    if (tintColor) {
+        CGContextSaveGState(outputContext);
+        CGContextSetFillColorWithColor(outputContext, tintColor.CGColor);
+        CGContextFillRect(outputContext, imageRect);
+        CGContextRestoreGState(outputContext);
+    }
+    
+    // Output image is ready.
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return outputImage;
 }
 
 @end

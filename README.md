@@ -28,6 +28,11 @@ that is why we name it a popin controller. And as it is implemented as a categor
 =========
 
 ## Changes
+v 1.3
+* Added on option to have a blurry background view
+* Added an option to change popin alignment in parent (thanks to @leverdeterre)
+* Added a custom block to define custom in and out animations (thanks to @jonasman)
+* Fixed an issue with appearance event forwarding
 
 v 1.2
 
@@ -56,6 +61,7 @@ Just add the following line in your podfile
 Drag and drop the category files in your project and you are done.
 
 ### Using MaryPopin
+The full documentation is available [on CocoaDocs](http://cocoadocs.org/docsets/MaryPopin/).
 
 #### Basic usage
 
@@ -108,7 +114,11 @@ By default, popin is centered in the parent controller view. But you can provide
 ```
 
 ### Sample project
-The sample project show how to present and dismiss a popin with different transition styles.
+The sample project show how to present and dismiss a popin with different transition styles. 
+
+If you are using CocoaPods in version 0.29 or better, you can quickly run the demo project with the following command line :
+
+	pod try MaryPopin
 
 ## Requirements
 MaryPopin requires Xcode 5 as it uses (optionaly) UIKit Dynamics and motion effects. You can use iOS 5 as a target deployment version. Note that some transition styles are not supported under iOS 7 and will be replaced by the default transition style.
@@ -124,4 +134,4 @@ Contributions for bug fixing or improvements are welcomed. Feel free to submit a
 ## Licence
 MaryPopin is available under the MIT license. See the LICENSE file for more info.
 
-[![Analytics](https://ga-beacon.appspot.com/UA-44164731-2/mary-popin/readme?pixel)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-44164731-1/mary-popin/readme?pixel)](https://github.com/igrigorik/ga-beacon)

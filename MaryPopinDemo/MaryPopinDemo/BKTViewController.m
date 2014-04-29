@@ -29,6 +29,7 @@
 @interface BKTViewController ()
 
 @property (nonatomic, getter = isDismissable) BOOL dismissable;
+@property (nonatomic, assign) NSInteger selectedAlignementOption;
 
 - (IBAction)presentPopinPressed:(id)sender;
 
@@ -39,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.selectedAlignementOption = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -56,6 +58,34 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
+    
+    //Set popin alignement according to value in segmented control
+    [popin setPopinAlignment:self.selectedAlignementOption];
+    
+    //Add option for a blurry background
+    [popin setPopinOptions:[popin popinOptions]|BKTPopinBlurryDimmingView];
+    
+    //Define a custom transition style
+    if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
+    {
+        [popin setPopinCustomInAnimation:^(UIViewController *popinController, CGRect initialFrame, CGRect finalFrame) {
+                      
+            popinController.view.frame = finalFrame;
+            popinController.view.transform = CGAffineTransformMakeRotation(M_PI_4 / 2);
+            
+        }];
+        
+        [popin setPopinCustomOutAnimation:^(UIViewController *popinController, CGRect initialFrame, CGRect finalFrame) {
+            
+            popinController.view.frame = finalFrame;
+            popinController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
+            
+        }];
+    }
+    
+    [popin setPreferedPopinContentSize:CGSizeMake(280.0, 240.0)];
+    
+    //Set popin transition direction
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [self.navigationController presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
@@ -73,6 +103,11 @@
         return indexPath.row;
     }
     return 0;
+}
+
+- (IBAction)segmentedControlChange:(UISegmentedControl *)sender
+{
+    self.selectedAlignementOption = sender.selectedSegmentIndex;
 }
 
 @end

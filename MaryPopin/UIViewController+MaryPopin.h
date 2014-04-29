@@ -52,7 +52,11 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
      *  When the view controller is presented, its view has a undefined behavior.
      */
     //UIDynamics transition styles
-    BKTPopinTransitionStyleSnap
+    BKTPopinTransitionStyleSnap,
+    /**
+     *  When the view controller is presented, its view has a custom animation.
+     */
+    BKTPopinTransitionStyleCustom
 };
 
 /**
@@ -96,9 +100,41 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
      */
     BKTPopinDisableAutoDismiss = 1 << 1,
     /**
+     *  Takes a screenshot of presenting view, blurs it and uses it as dimming view. Available only on ios 7.x.
+     */
+    BKTPopinBlurryDimmingView = 1 << 2,
+    /**
      *  Set a background dimming view with a clear color. Default is a semi-transparent black background
      */
     BKTPopinDimmingViewStyleNone = 1 << 16,
+};
+
+/**
+ *  Options to quickly configure popin alignment in its container. Default is centered.
+ *  @see -popinAlignement
+ *  @since v1.3
+ */
+typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
+    /**
+     *  Popin will be centered in container
+     */
+    BKTPopinAlignementOptionCentered = 0,
+    /**
+     *  Popin will be stuck to top in container
+     */
+    BKTPopinAlignementOptionUp       = 1,
+    /**
+     *  Popin will be left-aligned in container
+     */
+    BKTPopinAlignementOptionLeft     = 2,
+    /**
+     *  Default will be stuck to bottom in container
+     */
+    BKTPopinAlignementOptionDown     = 3,
+    /**
+     *  Popin will be right-aligned in container
+     */
+    BKTPopinAlignementOptionRight    = 4
 };
 
 /**
@@ -245,4 +281,55 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
 
+
+/**
+ *  Get the custom in animation block. Default value is nil.
+ *
+ *  @return The In animation block.
+ *  @see -setPopinCustomInAnimation:
+ *  @since v1.3
+ */
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation;
+
+/**
+ *  The popinCustomAnimation let you pass an custom in animation. The popInController frame must be the finalFrame in the end of the animation.
+ *
+ *  @param customInAnimation The Block with animation.
+ *  @since v1.3
+ */
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customInAnimation;
+
+/**
+ *  Get the custom out animation block. Default value is nil.
+ *
+ *  @return The Out animation block.
+ *  @see -setPopinCustomOutAnimation:
+ *  @since v1.3
+ */
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation;
+
+/**
+ *  The popinCustomOutAnimation let's you pass an custom out animation. The popInController frame must be the finalFrame in the end of the animation.
+ *
+ *  @param customOutAnimation The Block with animation.
+ *  @since v1.3
+ */
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
+
+/**
+ *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
+ *
+ *  @return The BKTPopinAlignementOption values as a bit field.
+ *  @see -setPopinAlignement:
+ *  @since v1.3
+ */
+- (BKTPopinAlignementOption)popinAlignment;
+
+/**
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
+ *
+ *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
+ *  @since v1.3
+ */
+- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
 @end
