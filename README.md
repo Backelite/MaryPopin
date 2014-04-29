@@ -28,6 +28,11 @@ that is why we name it a popin controller. And as it is implemented as a categor
 =========
 
 ## Changes
+v 1.3
+* Added on option to have a blurry background view
+* Added an option to change popin alignment in parent (thanks to @leverdeterre)
+* Added a custom block to define custom in and out animations (thanks to @jonasman)
+* Fixed an issue with appearance event forwarding
 
 v 1.2
 
@@ -56,6 +61,7 @@ Just add the following line in your podfile
 Drag and drop the category files in your project and you are done.
 
 ### Using MaryPopin
+The full documentation is available [on CocoaDocs](http://cocoadocs.org/docsets/MaryPopin/).
 
 #### Basic usage
 
