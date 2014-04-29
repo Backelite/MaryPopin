@@ -113,9 +113,9 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self.view addSubview:dimmingView];
             
             //Adding controller
+            [self addPopinToHierarchy:popinController];
             CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             popinController.view.frame = popinFrame;
-            [self addPopinToHierarchy:popinController];
             [popinController didMoveToParentViewController:self];
             if (completion) {
                 completion();
@@ -407,23 +407,23 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
 {
-    objc_setAssociatedObject(self, @selector(popinCustomInAnimation),  popinCustomInAnimation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(popinCustomInAnimation),  popinCustomInAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 
-- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation
 {
     objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }

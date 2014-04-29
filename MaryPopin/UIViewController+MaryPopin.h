@@ -251,37 +251,37 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
 
 
 /**
- *  The popinCustumInAnimation let's you pass an costum animation. Default value is nil.
+ *  Get the custom in animation block. Default value is nil.
  *
- *  @return The Block animation.
+ *  @return The In animation block.
  *  @see -setPopinCustomInAnimation:
- *  @since v1.0
+ *  @since v1.3
  */
-- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation;
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation;
 
 /**
- *  The popinCostumAnimation let's you pass an custom in animation. The popInController frame must be the finalFrame in the end of the animation.
+ *  The popinCustomAnimation let you pass an custom in animation. The popInController frame must be the finalFrame in the end of the animation.
  *
  *  @param customInAnimation The Block with animation.
- *  @since v1.0
+ *  @since v1.3
  */
-- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))customInAnimation;
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customInAnimation;
 
 /**
- *  The popinCustomOutAnimation let's you pass an costum animation. Default value is nil.
+ *  Get the custom out animation block. Default value is nil.
  *
- *  @return The Block animation.
+ *  @return The Out animation block.
  *  @see -setPopinCustomOutAnimation:
- *  @since v1.0
+ *  @since v1.3
  */
-- (void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation;
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation;
 
 /**
- *  The popinCostumAnimation let's you pass an custom out animation. The popInController frame must be the finalFrame in the end of the animation.
+ *  The popinCustomOutAnimation let's you pass an custom out animation. The popInController frame must be the finalFrame in the end of the animation.
  *
  *  @param customOutAnimation The Block with animation.
- *  @since v1.0
+ *  @since v1.3
  */
-- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popInController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
 
 @end
