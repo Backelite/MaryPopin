@@ -319,7 +319,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @see -setPopinAlignement:
  *  @since v1.3
  */
-- (BKTPopinAlignementOption)popinAlignement;
+- (BKTPopinAlignementOption)popinAlignment;
 
 /**
  *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
@@ -327,5 +327,5 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
  *  @since v1.3
  */
-- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement;
+- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
 @end

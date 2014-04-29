@@ -308,7 +308,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     }
     
     //Align popin in container rect
-    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignement]);
+    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
     
     //Save popin frame in case of displacement with keyboard
     [popinViewController setOriginalPopinFrame:popinPreferedFrame];
@@ -322,11 +322,27 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     CGRect frame = popinController.view.frame;
     if (direction == BKTPopinTransitionDirectionTop || direction == BKTPopinTransitionDirectionBottom) {
         CGFloat multiplier = (direction == BKTPopinTransitionDirectionBottom) ? 1.0 : -1.0;
-        CGFloat yOffset = (CGRectGetHeight(self.view.frame) - CGRectGetMinY(popinController.view.frame) + margin) * multiplier;
+        CGFloat popinPosition = 0.0f;
+        
+        if (direction == BKTPopinTransitionDirectionTop) {
+            popinPosition = CGRectGetMaxY(frame);
+        } else if (direction == BKTPopinTransitionDirectionBottom) {
+            popinPosition = CGRectGetHeight(self.view.frame) - CGRectGetMinY(frame);
+        }
+        
+        CGFloat yOffset = (popinPosition + margin) * multiplier;
         frame = CGRectOffset(frame, 0.0f, yOffset);
     } else {
         CGFloat multiplier = (direction == BKTPopinTransitionDirectionRight) ? 1.0 : -1.0;
-        CGFloat xOffset = (CGRectGetWidth(self.view.frame) - CGRectGetMinX(popinController.view.frame) + margin) * multiplier;
+        CGFloat popinPosition = 0.0f;
+        
+        if (direction == BKTPopinTransitionDirectionLeft) {
+            popinPosition = CGRectGetMaxX(frame);
+        } else if (direction == BKTPopinTransitionDirectionRight) {
+            popinPosition = CGRectGetWidth(self.view.frame) - CGRectGetMinX(frame);
+        }
+        
+        CGFloat xOffset = (popinPosition + margin) * multiplier;
         frame = CGRectOffset(frame, xOffset, 0.0f);
     }
     return frame;
@@ -489,7 +505,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (BKTPopinAlignementOption)popinAlignement
+- (BKTPopinAlignementOption)popinAlignment
 {
     id storedValue = objc_getAssociatedObject(self, _cmd);
     if (nil == storedValue) {
@@ -498,9 +514,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 
-- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement
+- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment
 {
-    objc_setAssociatedObject(self, @selector(popinAlignement),  [NSNumber numberWithInt:popinAlignement], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(popinAlignment),  [NSNumber numberWithInt:popinAlignment], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *)dimmingView

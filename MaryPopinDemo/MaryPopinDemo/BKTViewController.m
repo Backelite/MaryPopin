@@ -58,8 +58,11 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
-    [popin setPopinAlignement:self.selectedAlignementOption];
     
+    //Set popin alignement according to value in segmented control
+    [popin setPopinAlignment:self.selectedAlignementOption];
+    
+    //Define a custom transition style
     if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
     {
         [popin setPopinCustomInAnimation:^(UIViewController *popinController, CGRect initialFrame, CGRect finalFrame) {
@@ -77,8 +80,10 @@
         }];
     }
     
+    [popin setPreferedPopinContentSize:CGSizeMake(280.0, 240.0)];
+    
+    //Set popin transition direction
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
-    [popin setPreferedPopinContentSize:CGSizeMake(300.0f, 300.0f)];
     [self.navigationController presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
     }];
