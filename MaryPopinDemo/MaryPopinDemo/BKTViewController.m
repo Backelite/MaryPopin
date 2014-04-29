@@ -56,6 +56,16 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
+    
+    if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
+    {
+        [popin setPopinCustomInAnimation:^(UIViewController *popInController, CGRect initialFrame, CGRect finalFrame) {
+                      
+            popInController.view.frame = finalFrame;
+            
+        }];
+    }
+    
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [self.navigationController presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
