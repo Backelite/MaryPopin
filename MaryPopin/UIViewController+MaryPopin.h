@@ -106,6 +106,34 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
 };
 
 /**
+ *  Options to quickly configure popin alignment in its container. Default is centered.
+ *  @see -popinAlignement
+ *  @since v1.3
+ */
+typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
+    /**
+     *  Popin will be centered in container
+     */
+    BKTPopinAlignementOptionCentered = 0,
+    /**
+     *  Popin will be stuck to top in container
+     */
+    BKTPopinAlignementOptionUp       = 1,
+    /**
+     *  Popin will be left-aligned in container
+     */
+    BKTPopinAlignementOptionLeft     = 2,
+    /**
+     *  Default will be stuck to bottom in container
+     */
+    BKTPopinAlignementOptionDown     = 3,
+    /**
+     *  Popin will be right-aligned in container
+     */
+    BKTPopinAlignementOptionRight    = 4
+};
+
+/**
  * `MaryPopin` is a category allowing modal-like presentation of view controllers but with more configuration options.
  * Configuration options include popin size, transition style, transition direction, response to keyboard notifications and auto dismiss.
  * @since v1.0
@@ -284,4 +312,20 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  */
 - (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
 
+/**
+ *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
+ *
+ *  @return The BKTPopinAlignementOption values as a bit field.
+ *  @see -setPopinAlignement:
+ *  @since v1.3
+ */
+- (BKTPopinAlignementOption)popinAlignement;
+
+/**
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
+ *
+ *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
+ *  @since v1.3
+ */
+- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement;
 @end
