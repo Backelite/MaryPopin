@@ -135,6 +135,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                 dimmingView.alpha = 1.0f;
             }];
             
+            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:YES];
             [self addPopinToHierarchy:popinController];
             CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             [popinController.view setFrame:popinFrame];
@@ -151,6 +152,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                                  animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                  completion:^(BOOL finished) {
                                      [popinController didMoveToParentViewController:self];
+                                     [self forwardAppearanceEndingIfNeeded:popinController];
                                      if (completion) {
                                          completion();
                                      }
@@ -162,6 +164,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                                      animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                      completion:^(BOOL finished) {
                         [popinController didMoveToParentViewController:self];
+                        [self forwardAppearanceEndingIfNeeded:popinController];
                         if (completion) {
                             completion();
                         }
@@ -173,10 +176,12 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [self.view addSubview:dimmingView];
             
             //Adding controller
+            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:NO];
             [self addPopinToHierarchy:popinController];
             CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             popinController.view.frame = popinFrame;
             [popinController didMoveToParentViewController:self];
+            [self forwardAppearanceEndingIfNeeded:popinController];
             if (completion) {
                 completion();
             }
@@ -220,6 +225,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         if ([presentedPopin popinTransitionUsesDynamics]) {
             [self snapOutAnimationForPopinController:presentedPopin withDirection:presentedPopin.popinTransitionDirection completion:completion];
         } else {
+            [self forwardAppearanceBeginningIfNeeded:presentedPopin appearing:NO animated:YES];
             [UIView animateWithDuration:0.3
                                   delay:0 options:UIViewAnimationOptionCurveEaseIn
                              animations:[self outAnimationForPopinController:presentedPopin]
@@ -228,11 +234,12 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                                  if (completion) {
                                      completion();
                                  }
+                                 [self forwardAppearanceEndingIfNeeded:presentedPopin];
                              }];
         }
     } else {
+        [self forwardAppearanceBeginningIfNeeded:presentedPopin appearing:NO animated:NO];
         [self removePopinFromHierarchy:presentedPopin];
-        
         //Removing background
         [self.dimmingView removeFromSuperview];
         [self setDimmingView:nil];
@@ -240,6 +247,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         if (completion) {
             completion();
         }
+        [self forwardAppearanceEndingIfNeeded:presentedPopin];
     }
 }
 
@@ -386,6 +394,20 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     //Set popin hierarchy accessors
     [self setPresentedPopinViewController:popinController];
     [popinController setPresentingPopinViewController:self];
+}
+
+- (void)forwardAppearanceBeginningIfNeeded:(UIViewController *)popinController appearing:(BOOL)isAppearing animated:(BOOL)animated
+{
+    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+        [popinController beginAppearanceTransition:isAppearing animated:animated];
+    }
+}
+
+- (void)forwardAppearanceEndingIfNeeded:(UIViewController *)popinController
+{
+    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+        [popinController endAppearanceTransition];
+    }
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
@@ -665,6 +687,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     __weak UISnapBehavior *weakSnap = snap;
     snap.action = ^ {
         if (CGRectEqualToRect(popinController.view.frame, finalFrame)) {
+            [self forwardAppearanceEndingIfNeeded:popinController];
             if (completion) {
                 completion();
             }
@@ -697,8 +720,11 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             if (completion) {
                 completion();
             }
+            [self forwardAppearanceEndingIfNeeded:popinController];
         }
     };
+    
+    [self forwardAppearanceBeginningIfNeeded:popinController appearing:NO animated:YES];
     [self.animator addBehavior:snap];
     
     return NULL;
