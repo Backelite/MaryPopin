@@ -52,7 +52,11 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
      *  When the view controller is presented, its view has a undefined behavior.
      */
     //UIDynamics transition styles
-    BKTPopinTransitionStyleSnap
+    BKTPopinTransitionStyleSnap,
+    /**
+     *  When the view controller is presented, its view has a custom animation.
+     */
+    BKTPopinTransitionStyleCustom
 };
 
 /**
@@ -244,5 +248,40 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  *  @since v1.0
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
+
+
+/**
+ *  Get the custom in animation block. Default value is nil.
+ *
+ *  @return The In animation block.
+ *  @see -setPopinCustomInAnimation:
+ *  @since v1.3
+ */
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation;
+
+/**
+ *  The popinCustomAnimation let you pass an custom in animation. The popInController frame must be the finalFrame in the end of the animation.
+ *
+ *  @param customInAnimation The Block with animation.
+ *  @since v1.3
+ */
+- (void)setPopinCustomInAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customInAnimation;
+
+/**
+ *  Get the custom out animation block. Default value is nil.
+ *
+ *  @return The Out animation block.
+ *  @see -setPopinCustomOutAnimation:
+ *  @since v1.3
+ */
+- (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomOutAnimation;
+
+/**
+ *  The popinCustomOutAnimation let's you pass an custom out animation. The popInController frame must be the finalFrame in the end of the animation.
+ *
+ *  @param customOutAnimation The Block with animation.
+ *  @since v1.3
+ */
+- (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
 
 @end
