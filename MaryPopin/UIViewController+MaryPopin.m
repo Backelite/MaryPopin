@@ -66,8 +66,6 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
         
         [self setDimmingView:dimmingView];
         
-        CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
-        
         if (YES == animated) {
             dimmingView.alpha = 0.0f;
             [self.view addSubview:dimmingView];
@@ -78,6 +76,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             }];
             
             [self addPopinToHierarchy:popinController];
+            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             [popinController.view setFrame:popinFrame];
             
             if ([popinController popinTransitionUsesDynamics] ) {
@@ -114,6 +113,7 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
             [self.view addSubview:dimmingView];
             
             //Adding controller
+            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             popinController.view.frame = popinFrame;
             [self addPopinToHierarchy:popinController];
             [popinController didMoveToParentViewController:self];
@@ -287,14 +287,14 @@ CG_INLINE CGRect	BkRectCenterInRect(CGRect myRect, CGRect refRect)
 
 - (void)addPopinToHierarchy:(UIViewController *)popinController
 {
+    //Add child with animation
+    [self addChildViewController:popinController];
+    
     //Remove autoresizing mask
     [popinController.view setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|
      UIViewAutoresizingFlexibleRightMargin|
      UIViewAutoresizingFlexibleTopMargin|
      UIViewAutoresizingFlexibleBottomMargin];
-    
-    //Add child with animation
-    [self addChildViewController:popinController];
     
     //Add motion effect
     [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
