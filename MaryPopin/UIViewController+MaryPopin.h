@@ -101,6 +101,14 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
     BKTPopinDimmingViewStyleNone = 1 << 16,
 };
 
+typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
+    BKTPopinAlignementOptionCentered = 0,
+    BKTPopinAlignementOptionUp       = 1,
+    BKTPopinAlignementOptionLeft     = 2,
+    BKTPopinAlignementOptionDown     = 3,
+    BKTPopinAlignementOptionRight    = 4
+};
+
 /**
  * `MaryPopin` is a category allowing modal-like presentation of view controllers but with more configuration options.
  * Configuration options include popin size, transition style, transition direction, response to keyboard notifications and auto dismiss.
@@ -245,4 +253,20 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
 
+/**
+ *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
+ *
+ *  @return The BKTPopinAlignementOption values as a bit field.
+ *  @see -setPopinAlignement:
+ *  @since v1.2
+ */
+- (BKTPopinAlignementOption)popinAlignement;
+
+/**
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
+ *
+ *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
+ *  @since v1.2
+ */
+- (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement;
 @end

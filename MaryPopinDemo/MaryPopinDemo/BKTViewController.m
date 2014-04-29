@@ -29,6 +29,7 @@
 @interface BKTViewController ()
 
 @property (nonatomic, getter = isDismissable) BOOL dismissable;
+@property (nonatomic, assign) NSInteger selectedAlignementOption;
 
 - (IBAction)presentPopinPressed:(id)sender;
 
@@ -39,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.selectedAlignementOption = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -56,7 +58,9 @@
     } else {
         [popin setPopinOptions:BKTPopinDisableAutoDismiss];
     }
+    [popin setPopinAlignement:self.selectedAlignementOption];
     [popin setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
+    [popin setPreferedPopinContentSize:CGSizeMake(300.0f, 300.0f)];
     [self.navigationController presentPopinController:popin animated:YES completion:^{
         NSLog(@"Popin presented !");
     }];
@@ -73,6 +77,11 @@
         return indexPath.row;
     }
     return 0;
+}
+
+- (IBAction)segmentedControlChange:(UISegmentedControl *)sender
+{
+    self.selectedAlignementOption = sender.selectedSegmentIndex;
 }
 
 @end
