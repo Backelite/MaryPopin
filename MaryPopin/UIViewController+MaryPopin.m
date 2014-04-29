@@ -128,7 +128,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         
         if (options & BKTPopinDimmingViewStyleNone) {
             [dimmingView setBackgroundColor:[UIColor clearColor]];
-        } else if (options & BKTPopinBlurryDimmingView) {
+        } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             UIImage *bgImage = [self createImageFromView:self.view];
             bgImage = [bgImage marypopin_applyBlurWithRadius:20.0 tintColor:[UIColor clearColor] saturationDeltaFactor:1.8 maskImage:nil];
             UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
