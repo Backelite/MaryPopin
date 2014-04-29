@@ -59,9 +59,17 @@
     
     if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
     {
-        [popin setPopinCustomInAnimation:^(UIViewController *popInController, CGRect initialFrame, CGRect finalFrame) {
+        [popin setPopinCustomInAnimation:^(UIViewController *popinController, CGRect initialFrame, CGRect finalFrame) {
                       
-            popInController.view.frame = finalFrame;
+            popinController.view.frame = finalFrame;
+            popinController.view.transform = CGAffineTransformMakeRotation(M_PI_4 / 2);
+            
+        }];
+        
+        [popin setPopinCustomOutAnimation:^(UIViewController *popinController, CGRect initialFrame, CGRect finalFrame) {
+            
+            popinController.view.frame = finalFrame;
+            popinController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
             
         }];
     }
