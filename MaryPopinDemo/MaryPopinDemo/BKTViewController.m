@@ -62,6 +62,9 @@
     //Set popin alignement according to value in segmented control
     [popin setPopinAlignment:self.selectedAlignementOption];
     
+    //Add option for a blurry background
+    [popin setPopinOptions:[popin popinOptions]|BKTPopinBlurryDimmingView];
+    
     //Define a custom transition style
     if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
     {

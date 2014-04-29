@@ -100,6 +100,10 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
      */
     BKTPopinDisableAutoDismiss = 1 << 1,
     /**
+     *  Takes a screenshot of presenting view, blurs it and uses it as dimming view. Available only on ios 7.x.
+     */
+    BKTPopinBlurryDimmingView = 1 << 2,
+    /**
      *  Set a background dimming view with a clear color. Default is a semi-transparent black background
      */
     BKTPopinDimmingViewStyleNone = 1 << 16,
