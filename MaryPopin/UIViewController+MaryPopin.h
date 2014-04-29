@@ -101,11 +101,31 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
     BKTPopinDimmingViewStyleNone = 1 << 16,
 };
 
+/**
+ *  Options to quickly configure popin alignment in its container. Default is centered.
+ *  @see -popinAlignement
+ *  @since v1.3
+ */
 typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
+    /**
+     *  Popin will be centered in container
+     */
     BKTPopinAlignementOptionCentered = 0,
+    /**
+     *  Popin will be stuck to top in container
+     */
     BKTPopinAlignementOptionUp       = 1,
+    /**
+     *  Popin will be left-aligned in container
+     */
     BKTPopinAlignementOptionLeft     = 2,
+    /**
+     *  Default will be stuck to bottom in container
+     */
     BKTPopinAlignementOptionDown     = 3,
+    /**
+     *  Popin will be right-aligned in container
+     */
     BKTPopinAlignementOptionRight    = 4
 };
 
@@ -258,7 +278,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *
  *  @return The BKTPopinAlignementOption values as a bit field.
  *  @see -setPopinAlignement:
- *  @since v1.2
+ *  @since v1.3
  */
 - (BKTPopinAlignementOption)popinAlignement;
 
@@ -266,7 +286,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
  *
  *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
- *  @since v1.2
+ *  @since v1.3
  */
 - (void)setPopinAlignement:(BKTPopinAlignementOption)popinAlignement;
 @end

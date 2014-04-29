@@ -24,7 +24,8 @@
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
-#define kMaryPopinStandartMargin 18.0f
+//Standard margin value on iOS
+#define kMaryPopinStandardMargin 20.0f
 
 CG_INLINE CGRect    BkRectCenterInRect(CGRect myRect, CGRect refRect)
 {
@@ -298,11 +299,11 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     if (NO == CGRectEqualToRect(preferedContainerRect, CGRectUnion(preferedContainerRect, popinPreferedFrame))) {
         //Resize popin frame to fit inside container rect
         if (CGRectGetHeight(popinPreferedFrame) >= CGRectGetHeight(preferedContainerRect)) {
-            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - 2*kMaryPopinStandartMargin; //Standard margins
+            popinPreferedFrame.size.height = CGRectGetHeight(preferedContainerRect) - kMaryPopinStandardMargin * 2; //Standard margins
         }
         
         if (CGRectGetWidth(popinPreferedFrame) >= CGRectGetWidth(preferedContainerRect)) {
-            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - 2*kMaryPopinStandartMargin; //Standard margins
+            popinPreferedFrame.size.width = CGRectGetWidth(preferedContainerRect) - kMaryPopinStandardMargin * 2; //Standard margins
         }
     }
     
