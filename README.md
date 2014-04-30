@@ -28,6 +28,9 @@ that is why we name it a popin controller. And as it is implemented as a categor
 =========
 
 ## Changes
+v 1.3.1
+* Fixed an issue with default alignment option
+
 v 1.3
 * Added on option to have a blurry background view
 * Added an option to change popin alignment in parent (thanks to @leverdeterre)
