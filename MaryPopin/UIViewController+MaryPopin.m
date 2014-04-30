@@ -543,9 +543,6 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (BKTPopinAlignementOption)popinAlignment
 {
     id storedValue = objc_getAssociatedObject(self, _cmd);
-    if (nil == storedValue) {
-        return BKTPopinAlignementOptionDown;
-    }
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 
