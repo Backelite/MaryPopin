@@ -64,26 +64,26 @@ CG_INLINE CGRect    BkRectAlignRightInRect(CGRect myRect, CGRect refRect)
 	return myRect;
 }
 
-CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRect,BKTPopinAlignementOption option)
+CG_INLINE CGRect    BkRectInRectWithAlignmentOption(CGRect myRect, CGRect refRect,BKTPopinAlignmentOption option)
 {
     switch (option) {
-        case BKTPopinAlignementOptionCentered:
+        case BKTPopinAlignmentOptionCentered:
             return BkRectCenterInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionUp:
+        case BKTPopinAlignmentOptionUp:
             return BkRectAlignUpInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionLeft:
+        case BKTPopinAlignmentOptionLeft:
             return BkRectAlignLeftInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionDown:
+        case BKTPopinAlignmentOptionDown:
             return BkRectAlignDownInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionRight:
+        case BKTPopinAlignmentOptionRight:
             return BkRectAlignRightInRect(myRect,refRect);
             break;
             
@@ -329,7 +329,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     }
     
     //Align popin in container rect
-    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
+    popinPreferedFrame = BkRectInRectWithAlignmentOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
     
     //Save popin frame in case of displacement with keyboard
     [popinViewController setOriginalPopinFrame:popinPreferedFrame];
@@ -540,13 +540,13 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (BKTPopinAlignementOption)popinAlignment
+- (BKTPopinAlignmentOption)popinAlignment
 {
-    id storedValue = objc_getAssociatedObject(self, _cmd);
+    //id storedValue = objc_getAssociatedObject(self, _cmd);
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 
-- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment
+- (void)setPopinAlignment:(BKTPopinAlignmentOption)popinAlignment
 {
     objc_setAssociatedObject(self, @selector(popinAlignment),  [NSNumber numberWithInt:popinAlignment], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -816,7 +816,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 #pragma mark - Helpers
 
-- (UIImage *)createImageFromView:(UIView *)view {
+- (UIImage *)createImageFromView:(UIView *)view
+{
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
     UIImage * img = UIGraphicsGetImageFromCurrentImageContext();

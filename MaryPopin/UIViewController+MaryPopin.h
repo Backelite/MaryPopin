@@ -114,27 +114,27 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  *  @see -popinAlignement
  *  @since v1.3
  */
-typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
+typedef NS_ENUM(NSInteger, BKTPopinAlignmentOption) {
     /**
      *  Popin will be centered in container
      */
-    BKTPopinAlignementOptionCentered = 0,
+    BKTPopinAlignmentOptionCentered = 0,
     /**
      *  Popin will be stuck to top in container
      */
-    BKTPopinAlignementOptionUp       = 1,
+    BKTPopinAlignmentOptionUp       = 1,
     /**
      *  Popin will be left-aligned in container
      */
-    BKTPopinAlignementOptionLeft     = 2,
+    BKTPopinAlignmentOptionLeft     = 2,
     /**
      *  Default will be stuck to bottom in container
      */
-    BKTPopinAlignementOptionDown     = 3,
+    BKTPopinAlignmentOptionDown     = 3,
     /**
      *  Popin will be right-aligned in container
      */
-    BKTPopinAlignementOptionRight    = 4
+    BKTPopinAlignmentOptionRight    = 4
 };
 
 /**
@@ -317,19 +317,19 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
 - (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
 
 /**
- *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
+ *  The options to apply to the popin. Default value is `BKTPopinAlignmentOptionCentered`.
  *
- *  @return The BKTPopinAlignementOption values as a bit field.
+ *  @return The BKTPopinAlignmentOption values as a bit field.
  *  @see -setPopinAlignement:
  *  @since v1.3
  */
-- (BKTPopinAlignementOption)popinAlignment;
+- (BKTPopinAlignmentOption)popinAlignment;
 
 /**
  *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
  *
- *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
+ *  @param popinAlignement The BKTPopinAlignmentOption values separated by | character.
  *  @since v1.3
  */
-- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
+- (void)setPopinAlignment:(BKTPopinAlignmentOption)popinAlignment;
 @end
