@@ -64,26 +64,26 @@ CG_INLINE CGRect    BkRectAlignRightInRect(CGRect myRect, CGRect refRect)
 	return myRect;
 }
 
-CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRect,BKTPopinAlignementOption option)
+CG_INLINE CGRect    BkRectInRectWithAlignmentOption(CGRect myRect, CGRect refRect,BKTPopinAlignmentOption option)
 {
     switch (option) {
-        case BKTPopinAlignementOptionCentered:
+        case BKTPopinAlignmentOptionCentered:
             return BkRectCenterInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionUp:
+        case BKTPopinAlignmentOptionUp:
             return BkRectAlignUpInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionLeft:
+        case BKTPopinAlignmentOptionLeft:
             return BkRectAlignLeftInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionDown:
+        case BKTPopinAlignmentOptionDown:
             return BkRectAlignDownInRect(myRect,refRect);
             break;
             
-        case BKTPopinAlignementOptionRight:
+        case BKTPopinAlignmentOptionRight:
             return BkRectAlignRightInRect(myRect,refRect);
             break;
             
@@ -130,8 +130,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [dimmingView setBackgroundColor:[UIColor clearColor]];
         } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             UIImage *bgImage = [self createImageFromView:self.view];
-            bgImage = [bgImage marypopin_applyBlurWithRadius:20.0 tintColor:[UIColor clearColor] saturationDeltaFactor:1.8 maskImage:nil];
+            BkBlurryParameters *parameters = [popinController blurryParameters];
+            bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:[UIColor clearColor] saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
             UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
+            bgImageView.alpha = parameters.alpha;
             [dimmingView addSubview:bgImageView];
         } else {
             [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
@@ -329,7 +331,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     }
     
     //Align popin in container rect
-    popinPreferedFrame = BkRectInRectWithAlignementOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
+    popinPreferedFrame = BkRectInRectWithAlignmentOption(popinPreferedFrame, preferedContainerRect,[popinViewController popinAlignment]);
     
     //Save popin frame in case of displacement with keyboard
     [popinViewController setOriginalPopinFrame:popinPreferedFrame];
@@ -540,13 +542,13 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (BKTPopinAlignementOption)popinAlignment
+- (BKTPopinAlignmentOption)popinAlignment
 {
-    id storedValue = objc_getAssociatedObject(self, _cmd);
+    //id storedValue = objc_getAssociatedObject(self, _cmd);
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 
-- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment
+- (void)setPopinAlignment:(BKTPopinAlignmentOption)popinAlignment
 {
     objc_setAssociatedObject(self, @selector(popinAlignment),  [NSNumber numberWithInt:popinAlignment], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -569,6 +571,21 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)setAnimator:(UIDynamicAnimator *)animator
 {
     objc_setAssociatedObject(self, @selector(animator), animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BkBlurryParameters *)blurryParameters
+{
+    BkBlurryParameters *param = objc_getAssociatedObject(self, _cmd);
+    if (nil == param) {
+        return [[BkBlurryParameters alloc] init];
+    }
+    
+    return param;
+}
+
+- (void)setBlurryParameters:(BkBlurryParameters *)blurryParameters
+{
+    objc_setAssociatedObject(self, @selector(blurryParameters), blurryParameters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - Animations
@@ -816,8 +833,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 #pragma mark - Helpers
 
-- (UIImage *)createImageFromView:(UIView *)view {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
+- (UIImage *)createImageFromView:(UIView *)view
+{
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0f);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
     UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -960,4 +978,18 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     return outputImage;
 }
 
+@end
+
+
+@implementation BkBlurryParameters
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.alpha = 1.0f;
+        self.radius = 20.f;
+        self.saturationDeltaFactor = 1.8f;
+    }
+    return self;
+}
 @end
