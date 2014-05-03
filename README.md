@@ -1,5 +1,8 @@
 MaryPopin
 =========
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Backelite/MaryPopin/blob/master/LICENSE)
+[![Release](http://img.shields.io/github/release/Backelite/MaryPopin.svg)](https://github.com/Backelite/MaryPopin)
+[![CocoaPods](http://img.shields.io/cocoapods/v/MaryPopin.svg)](https://github.com/Backelite/MaryPopin)
 
 MaryPopin is a category on `UIViewController` to present modal like controller with more flexibility.
 
