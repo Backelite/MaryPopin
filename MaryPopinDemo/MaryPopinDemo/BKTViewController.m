@@ -62,6 +62,12 @@
     //Set popin alignement according to value in segmented control
     [popin setPopinAlignment:self.selectedAlignementOption];
     
+    BkBlurryParameters *blurrayParameters = [BkBlurryParameters new];
+    blurrayParameters.alpha = 0.25f;
+    blurrayParameters.radius = 18.0f;
+    blurrayParameters.saturationDeltaFactor = 2.0f;
+    [popin setBlurryParameters:blurrayParameters];
+    
     //Add option for a blurry background
     [popin setPopinOptions:[popin popinOptions]|BKTPopinBlurryDimmingView];
     
