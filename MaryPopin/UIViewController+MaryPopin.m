@@ -94,7 +94,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 }
 
 
-@implementation BkBlurryParameters
+@implementation BKTBlurryParameters
 - (id)init
 {
     self = [super init];
@@ -102,6 +102,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         self.alpha = 1.0f;
         self.radius = 20.f;
         self.saturationDeltaFactor = 1.8f;
+        self.tintColor = [UIColor clearColor];
     }
     return self;
 }
@@ -144,8 +145,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [dimmingView setBackgroundColor:[UIColor clearColor]];
         } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             UIImage *bgImage = [self createImageFromView:self.view];
-            BkBlurryParameters *parameters = [popinController blurryParameters];
-            bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:[UIColor clearColor] saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
+            BKTBlurryParameters *parameters = [popinController blurryParameters];
+            bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:parameters.tintColor saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
             UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
             bgImageView.alpha = parameters.alpha;
             [dimmingView addSubview:bgImageView];
@@ -535,17 +536,17 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BkBlurryParameters *)blurryParameters
+- (BKTBlurryParameters *)blurryParameters
 {
-    BkBlurryParameters *param = objc_getAssociatedObject(self, _cmd);
+    BKTBlurryParameters *param = objc_getAssociatedObject(self, _cmd);
     if (nil == param) {
-        return [[BkBlurryParameters alloc] init];
+        return [[BKTBlurryParameters alloc] init];
     }
     
     return param;
 }
 
-- (void)setBlurryParameters:(BkBlurryParameters *)blurryParameters
+- (void)setBlurryParameters:(BKTBlurryParameters *)blurryParameters
 {
     objc_setAssociatedObject(self, @selector(blurryParameters), blurryParameters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }

@@ -23,10 +23,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BkBlurryParameters : NSObject
+@interface BKTBlurryParameters : NSObject
 @property (assign, nonatomic) CGFloat alpha;
 @property (assign, nonatomic) CGFloat radius;
 @property (assign, nonatomic) CGFloat saturationDeltaFactor;
+@property (strong, nonatomic) UIColor *tintColor;
 @end
 
 /**
@@ -339,7 +340,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  */
 - (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
 
-- (BkBlurryParameters *)blurryParameters;
-- (void)setBlurryParameters:(BkBlurryParameters *)blurryParameters;
+- (BKTBlurryParameters *)blurryParameters;
+- (void)setBlurryParameters:(BKTBlurryParameters *)blurryParameters;
 
 @end
