@@ -94,7 +94,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 }
 
 
-@implementation BKTBlurryParameters
+@implementation BKTBlurParameters
 - (id)init
 {
     self = [super init];
@@ -145,7 +145,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [dimmingView setBackgroundColor:[UIColor clearColor]];
         } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             UIImage *bgImage = [self createImageFromView:self.view];
-            BKTBlurryParameters *parameters = [popinController blurryParameters];
+            BKTBlurParameters *parameters = [popinController blurParameters];
             bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:parameters.tintColor saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
             UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
             bgImageView.alpha = parameters.alpha;
@@ -536,19 +536,19 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BKTBlurryParameters *)blurryParameters
+- (BKTBlurParameters *)blurParameters
 {
-    BKTBlurryParameters *param = objc_getAssociatedObject(self, _cmd);
+    BKTBlurParameters *param = objc_getAssociatedObject(self, _cmd);
     if (nil == param) {
-        return [[BKTBlurryParameters alloc] init];
+        return [[BKTBlurParameters alloc] init];
     }
     
     return param;
 }
 
-- (void)setBlurryParameters:(BKTBlurryParameters *)blurryParameters
+- (void)setBlurParameters:(BKTBlurParameters *)blurParameters
 {
-    objc_setAssociatedObject(self, @selector(blurryParameters), blurryParameters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(blurParameters), blurParameters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation

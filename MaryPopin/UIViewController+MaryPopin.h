@@ -23,11 +23,28 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKTBlurryParameters : NSObject
+/**
+ * Object to customize blurry background
+ */
+@interface BKTBlurParameters : NSObject
+/**
+ *  Property to customize background view alpha.
+ */
 @property (assign, nonatomic) CGFloat alpha;
+/**
+ *  Property to customize background view blur radius.
+ */
 @property (assign, nonatomic) CGFloat radius;
+/**
+ *  Property to customize background view blur saturation factor.
+ *  A value of 1.0 is neutral. Below it is desaturated and above it is more saturated.
+ */
 @property (assign, nonatomic) CGFloat saturationDeltaFactor;
+/**
+ *  Property to customize blur tint color. Default is clear color.
+ */
 @property (strong, nonatomic) UIColor *tintColor;
+
 @end
 
 /**
@@ -340,7 +357,21 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  */
 - (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
 
-- (BKTBlurryParameters *)blurryParameters;
-- (void)setBlurryParameters:(BKTBlurryParameters *)blurryParameters;
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @return The blur parameters object.
+ *  @see -setBlurParameters:
+ *  @since v1.4
+ */
+- (BKTBlurParameters *)blurParameters;
+
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @param blurParameters The blur parameters object.
+ *  @sicne v1.4
+ */
+- (void)setBlurParameters:(BKTBlurParameters *)blurParameters;
 
 @end
