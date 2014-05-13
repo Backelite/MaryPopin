@@ -104,6 +104,10 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
      */
     BKTPopinBlurryDimmingView = 1 << 2,
     /**
+     *  Disable parallax effect on iOS7
+     */
+    BKTPopinDisableParallaxEffect = 1 << 3,
+    /**
      *  Set a background dimming view with a clear color. Default is a semi-transparent black background
      */
     BKTPopinDimmingViewStyleNone = 1 << 16,

@@ -395,7 +395,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
      UIViewAutoresizingFlexibleBottomMargin];
     
     //Add motion effect
-    [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
+    BKTPopinOption options = [popinController popinOptions];
+    if (NO == (options & BKTPopinDisableParallaxEffect)) {
+        [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
+    }
     
     [self.view addSubview:popinController.view];
     //Create animator if needed
