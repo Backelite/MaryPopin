@@ -23,6 +23,13 @@
 
 #import <UIKit/UIKit.h>
 
+@interface BKTBlurryParameters : NSObject
+@property (assign, nonatomic) CGFloat alpha;
+@property (assign, nonatomic) CGFloat radius;
+@property (assign, nonatomic) CGFloat saturationDeltaFactor;
+@property (strong, nonatomic) UIColor *tintColor;
+@end
+
 /**
  *  Transition styles available when presenting popin view controllers.
  *  @since v1.0
@@ -332,4 +339,8 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @since v1.3
  */
 - (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
+
+- (BKTBlurryParameters *)blurryParameters;
+- (void)setBlurryParameters:(BKTBlurryParameters *)blurryParameters;
+
 @end
