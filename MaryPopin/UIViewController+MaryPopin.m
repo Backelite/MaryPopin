@@ -411,16 +411,25 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 - (void)forwardAppearanceBeginningIfNeeded:(UIViewController *)popinController appearing:(BOOL)isAppearing animated:(BOOL)animated
 {
-    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+    if ([self bk_shouldAutomaticallyForwardAppearanceMethods] == NO) {
         [popinController beginAppearanceTransition:isAppearing animated:animated];
     }
 }
 
 - (void)forwardAppearanceEndingIfNeeded:(UIViewController *)popinController
 {
-    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+    if ([self bk_shouldAutomaticallyForwardAppearanceMethods] == NO) {
         [popinController endAppearanceTransition];
     }
+}
+
+- (BOOL)bk_shouldAutomaticallyForwardAppearanceMethods
+{
+    if ([self respondsToSelector:@selector(shouldAutomaticallyForwardAppearanceMethods)]) {
+        return [self shouldAutomaticallyForwardAppearanceMethods];
+    }
+    
+    return [self automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers];
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
