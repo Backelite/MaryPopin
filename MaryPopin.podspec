@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MaryPopin"
-  s.version      = "1.3.1"
+  s.version      = "1.4"
   s.summary      = "Category to display modal-like view controllers with more options"
 
   s.description  = <<-DESC
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '5.0'
 
-  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :tag => "1.3.1" }
+  s.source       = { :git => "https://github.com/Backelite/MaryPopin.git", :tag => "1.4" }
 
   s.source_files  = 'MaryPopin/**/*.{h,m}'
 

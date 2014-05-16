@@ -93,6 +93,21 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     }
 }
 
+
+@implementation BKTBlurParameters
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.alpha = 1.0f;
+        self.radius = 20.f;
+        self.saturationDeltaFactor = 1.8f;
+        self.tintColor = [UIColor clearColor];
+    }
+    return self;
+}
+@end
+
 @interface UIImage (MaryPopinBlur)
 
 - (UIImage *)marypopin_applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
@@ -130,8 +145,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [dimmingView setBackgroundColor:[UIColor clearColor]];
         } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             UIImage *bgImage = [self createImageFromView:self.view];
-            bgImage = [bgImage marypopin_applyBlurWithRadius:20.0 tintColor:[UIColor clearColor] saturationDeltaFactor:1.8 maskImage:nil];
+            BKTBlurParameters *parameters = [popinController blurParameters];
+            bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:parameters.tintColor saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
             UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
+            bgImageView.alpha = parameters.alpha;
             [dimmingView addSubview:bgImageView];
         } else {
             [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
@@ -395,7 +412,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
      UIViewAutoresizingFlexibleBottomMargin];
     
     //Add motion effect
-    [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
+    BKTPopinOption options = [popinController popinOptions];
+    if (NO == (options & BKTPopinDisableParallaxEffect)) {
+        [UIViewController registerParalaxEffectForView:popinController.view WithDepth:10.0f];
+    }
     
     [self.view addSubview:popinController.view];
     //Create animator if needed
@@ -411,16 +431,25 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 - (void)forwardAppearanceBeginningIfNeeded:(UIViewController *)popinController appearing:(BOOL)isAppearing animated:(BOOL)animated
 {
-    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+    if ([self bk_shouldAutomaticallyForwardAppearanceMethods] == NO) {
         [popinController beginAppearanceTransition:isAppearing animated:animated];
     }
 }
 
 - (void)forwardAppearanceEndingIfNeeded:(UIViewController *)popinController
 {
-    if ([self shouldAutomaticallyForwardAppearanceMethods] == NO) {
+    if ([self bk_shouldAutomaticallyForwardAppearanceMethods] == NO) {
         [popinController endAppearanceTransition];
     }
+}
+
+- (BOOL)bk_shouldAutomaticallyForwardAppearanceMethods
+{
+    if ([self respondsToSelector:@selector(shouldAutomaticallyForwardAppearanceMethods)]) {
+        return [self shouldAutomaticallyForwardAppearanceMethods];
+    }
+        
+    return [self automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers];
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
@@ -519,6 +548,21 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (BKTBlurParameters *)blurParameters
+{
+    BKTBlurParameters *param = objc_getAssociatedObject(self, _cmd);
+    if (nil == param) {
+        return [[BKTBlurParameters alloc] init];
+    }
+    
+    return param;
+}
+
+- (void)setBlurParameters:(BKTBlurParameters *)blurParameters
+{
+    objc_setAssociatedObject(self, @selector(blurParameters), blurParameters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 - (void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))popinCustomInAnimation
 {
     return objc_getAssociatedObject(self, _cmd);
@@ -542,7 +586,6 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 - (BKTPopinAlignementOption)popinAlignment
 {
-    id storedValue = objc_getAssociatedObject(self, _cmd);
     return [objc_getAssociatedObject(self, _cmd) intValue];
 }
 

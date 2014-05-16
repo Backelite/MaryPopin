@@ -24,6 +24,30 @@
 #import <UIKit/UIKit.h>
 
 /**
+ * Object to customize blurry background
+ */
+@interface BKTBlurParameters : NSObject
+/**
+ *  Property to customize background view alpha.
+ */
+@property (assign, nonatomic) CGFloat alpha;
+/**
+ *  Property to customize background view blur radius.
+ */
+@property (assign, nonatomic) CGFloat radius;
+/**
+ *  Property to customize background view blur saturation factor.
+ *  A value of 1.0 is neutral. Below it is desaturated and above it is more saturated.
+ */
+@property (assign, nonatomic) CGFloat saturationDeltaFactor;
+/**
+ *  Property to customize blur tint color. Default is clear color.
+ */
+@property (strong, nonatomic) UIColor *tintColor;
+
+@end
+
+/**
  *  Transition styles available when presenting popin view controllers.
  *  @since v1.0
  */
@@ -103,6 +127,10 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
      *  Takes a screenshot of presenting view, blurs it and uses it as dimming view. Available only on ios 7.x.
      */
     BKTPopinBlurryDimmingView = 1 << 2,
+    /**
+     *  Disable parallax effect on iOS7
+     */
+    BKTPopinDisableParallaxEffect = 1 << 3,
     /**
      *  Set a background dimming view with a clear color. Default is a semi-transparent black background
      */
@@ -332,4 +360,22 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @since v1.3
  */
 - (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
+
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @return The blur parameters object.
+ *  @see -setBlurParameters:
+ *  @since v1.4
+ */
+- (BKTBlurParameters *)blurParameters;
+
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @param blurParameters The blur parameters object.
+ *  @sicne v1.4
+ */
+- (void)setBlurParameters:(BKTBlurParameters *)blurParameters;
+
 @end
