@@ -31,6 +31,11 @@ that is why we name it a popin controller. And as it is implemented as a categor
 =========
 
 ## Changes
+v1.4
+* Added an option to configure blur background
+* Fixed a crash with iOS 5.x
+* Fixed an unused variable warning
+
 v 1.3.1
 * Fixed an issue with default alignment option
 
@@ -127,7 +132,7 @@ If you are using CocoaPods in version 0.29 or better, you can quickly run the de
 	pod try MaryPopin
 
 ## Requirements
-MaryPopin requires Xcode 5 as it uses (optionaly) UIKit Dynamics and motion effects. You can use iOS 5 as a target deployment version. Note that some transition styles are not supported under iOS 7 and will be replaced by the default transition style.
+MaryPopin requires Xcode 5 as it uses (optionally) UIKit Dynamics and motion effects. You can use iOS 5 as a target deployment version. Note that some transition styles are not supported under iOS 7 and will be replaced by the default transition style.
 
 ### ARC
 MaryPopin uses ARC.  
