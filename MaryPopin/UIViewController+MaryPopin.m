@@ -448,7 +448,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     if ([self respondsToSelector:@selector(shouldAutomaticallyForwardAppearanceMethods)]) {
         return [self shouldAutomaticallyForwardAppearanceMethods];
     }
-    
+        
     return [self automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers];
 }
 
