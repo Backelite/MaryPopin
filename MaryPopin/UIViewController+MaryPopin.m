@@ -151,7 +151,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             bgImageView.alpha = parameters.alpha;
             [dimmingView addSubview:bgImageView];
         } else {
-            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
+            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
         }
         
         [self setDimmingView:dimmingView];
