@@ -237,7 +237,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)dismissCurrentPopinControllerAnimated:(BOOL)animated completion:(void(^)(void))completion
 {
     UIViewController *presentedPopin = self.presentedPopinViewController;
-    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillShowNotification object:nil];
     
     if (YES == animated) {
         //Remove child with animation
