@@ -445,11 +445,11 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 - (BOOL)bk_shouldAutomaticallyForwardAppearanceMethods
 {
-    if ([self respondsToSelector:@selector(shouldAutomaticallyForwardAppearanceMethods)]) {
-        return [self shouldAutomaticallyForwardAppearanceMethods];
-    }
-        
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
+    return [self shouldAutomaticallyForwardAppearanceMethods];
+#else
     return [self automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers];
+#endif
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
