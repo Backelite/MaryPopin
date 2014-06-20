@@ -151,7 +151,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             bgImageView.alpha = parameters.alpha;
             [dimmingView addSubview:bgImageView];
         } else {
-            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.1f]];
+            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
         }
         
         [self setDimmingView:dimmingView];
@@ -237,7 +237,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)dismissCurrentPopinControllerAnimated:(BOOL)animated completion:(void(^)(void))completion
 {
     UIViewController *presentedPopin = self.presentedPopinViewController;
-    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillShowNotification object:nil];
     
     if (YES == animated) {
         //Remove child with animation
@@ -445,11 +447,11 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 - (BOOL)bk_shouldAutomaticallyForwardAppearanceMethods
 {
-    if ([self respondsToSelector:@selector(shouldAutomaticallyForwardAppearanceMethods)]) {
-        return [self shouldAutomaticallyForwardAppearanceMethods];
-    }
-        
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
+    return [self shouldAutomaticallyForwardAppearanceMethods];
+#else
     return [self automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers];
+#endif
 }
 
 + (void)registerParalaxEffectForView:(UIView *)aView WithDepth:(CGFloat)depth;
