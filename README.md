@@ -31,6 +31,10 @@ that is why we name it a popin controller. And as it is implemented as a categor
 =========
 
 ## Changes
+
+v1.4.1
+* Warning and minor bug fixing (thanks to @Mazyod)
+
 v1.4
 * Added an option to configure blur background
 * Fixed a crash with iOS 5.x
