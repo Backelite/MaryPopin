@@ -395,10 +395,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     if (NO == [self.presentedPopinViewController popinTransitionUsesDynamics] || self.animator == nil) {
         [presentedPopin willMoveToParentViewController:nil];
         [presentedPopin.view removeFromSuperview];
-        
         [presentedPopin removeFromParentViewController];
         [self setPresentedPopinViewController:nil];
-        [self setPresentingPopinViewController:nil];
+        [presentedPopin setPresentingPopinViewController:nil];
     }
 }
 

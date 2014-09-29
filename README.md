@@ -32,6 +32,9 @@ that is why we name it a popin controller. And as it is implemented as a categor
 
 ## Changes
 
+v1.4.2
+* Fixed an issue when dismissing chained popins
+
 v1.4.1
 * Warning and minor bug fixing (thanks to @Mazyod)
 
