@@ -141,6 +141,9 @@ If you are using CocoaPods in version 0.29 or better, you can quickly run the de
 ## Requirements
 MaryPopin requires Xcode 5 as it uses (optionally) UIKit Dynamics and motion effects. You can use iOS 5 as a target deployment version. Note that some transition styles are not supported under iOS 7 and will be replaced by the default transition style.
 
+## Xamarin
+If you are using Xamarin to develop an iOS application, you can find a [C# binding here](https://github.com/Backelite/MaryPopin-Xamarin-iOS).
+
 ### ARC
 MaryPopin uses ARC.  
 If you are using MaryPopin in a non-arc project, you will need to set a `-fobjc-arc` compiler flag on every MaryPopin source files.  
