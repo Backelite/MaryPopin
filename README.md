@@ -35,39 +35,7 @@ that is why we name it a popin controller. And as it is implemented as a categor
 v1.4.2
 * Fixed an issue when dismissing chained popins
 
-v1.4.1
-* Warning and minor bug fixing (thanks to @Mazyod)
-
-v1.4
-* Added an option to configure blur background
-* Fixed a crash with iOS 5.x
-* Fixed an unused variable warning
-
-v 1.3.1
-* Fixed an issue with default alignment option
-
-v 1.3
-* Added on option to have a blurry background view
-* Added an option to change popin alignment in parent (thanks to @leverdeterre)
-* Added a custom block to define custom in and out animations (thanks to @jonasman)
-* Fixed an issue with appearance event forwarding
-
-v 1.2
-
-* Added an option to remove coupling between background view and auto-dismiss option
-* Fixed an issue causing background view to disappear when chaining multiple popins
-
-v 1.1.1
-
-* Code refactoring
-
-v 1.1
-
-* Support for iOS 5 & 6
-
-v 1.0
-
-* First public release
+Previous changelogs are available on [this page](https://github.com/Backelite/MaryPopin/releases).
 
 ## Getting started
 ### The Pod way
