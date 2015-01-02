@@ -30,20 +30,20 @@
 /**
  *  Property to customize background view alpha.
  */
-@property (assign, nonatomic) CGFloat alpha;
+@property (nonatomic, assign) CGFloat alpha;
 /**
  *  Property to customize background view blur radius.
  */
-@property (assign, nonatomic) CGFloat radius;
+@property (nonatomic, assign) CGFloat radius;
 /**
  *  Property to customize background view blur saturation factor.
  *  A value of 1.0 is neutral. Below it is desaturated and above it is more saturated.
  */
-@property (assign, nonatomic) CGFloat saturationDeltaFactor;
+@property (nonatomic, assign) CGFloat saturationDeltaFactor;
 /**
  *  Property to customize blur tint color. Default is clear color.
  */
-@property (strong, nonatomic) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;
 
 @end
 
@@ -172,6 +172,51 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  */
 @interface UIViewController (MaryPopin) <UIDynamicAnimatorDelegate>
 
+/**
+ *  Desired size for popin. This value may not be respected if popin is bigger than the presenting controller view.
+ *  If not set, the default size will be the controller view size.
+ *
+ *  @since v1.0
+ */
+@property (nonatomic, assign) CGSize preferedPopinContentSize;
+
+/**
+ *  The transition style to use when presenting a popin. For a list of possible transition style, see `BKTPopinTransitionStyle`. Default value is `BKTPopinTransitionStyleSlide`.
+ *
+ *  @since v1.0
+ */
+@property (nonatomic, assign) BKTPopinTransitionStyle popinTransitionStyle;
+
+/**
+ *  The transition direction to use when presenting a popin. For a list of possible transition direction, see BKTPopinTransitionDirection. Default value is `BKTPopinTransitionDirectionBottom`.
+ *
+ *  @since v1.0
+ */
+@property (nonatomic, assign) BKTPopinTransitionDirection popinTransitionDirection;
+
+/**
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinOption. Default value is `BKTPopinDefault`.
+ *
+ *  @discussion The BKTPopinOption values could be separated by | character.
+ *  @since v1.0
+ */
+@property (nonatomic, assign) BKTPopinOption popinOptions;
+
+/**
+ *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption. Default value is `BKTPopinAlignementOptionCentered`.
+ *
+ *  @discussion popinAlignement The BKTPopinAlignementOption values could be separated by | character.
+ *  @since v1.3
+ */
+@property (nonatomic, assign) BKTPopinAlignementOption popinAlignment;
+
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @since v1.4
+ */
+@property (nonatomic, strong) BKTBlurParameters *blurParameters;
+
 ///---------------------
 /// @name Presentation and dismiss
 ///---------------------
@@ -240,75 +285,6 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  */
 - (UIViewController *)presentingPopinViewController;
 
-/**
- *  Get desired size for popin.
- *
- *  @return The desired size for this controller when presented as a popin. Or `CGSizeZero` if not set.
- *  @see -setPreferedPopinContentSize:
- *  @since v1.0
- */
-- (CGSize)preferedPopinContentSize;
-
-/**
- *  Set the desired size for popin. This value may not be respected if popin is bigger than the presenting controller view.
- *  If not set, the default size will be the controller view size.
- *
- *  @param preferredSize The desired size for this controller when presented as a popin.
- *  @since v1.0
- */
-- (void)setPreferedPopinContentSize:(CGSize)preferredSize;
-
-/**
- *  The transition style to use when presenting a popin. Default value is `BKTPopinTransitionStyleSlide`.
- *
- *  @return A BKTPopinTransitionStyle value.
- *  @see -setPopinTransitionStyle:
- *  @since v1.0
- */
-- (BKTPopinTransitionStyle)popinTransitionStyle;
-
-/**
- *  The transition style to use when presenting a popin. For a list of possible transition style, see `BKTPopinTransitionStyle`.
- *
- *  @param transitionStyle A BKTPopinTransitionStyle value.
- *  @since v1.0
- */
-- (void)setPopinTransitionStyle:(BKTPopinTransitionStyle)transitionStyle;
-
-/**
- *  The transition direction to use when presenting a popin. Default value is `BKTPopinTransitionDirectionBottom`.
- *
- *  @return A BKTPopinTransitionDirection value.
- *  @see -setPopinTransitionDirection:
- *  @since v1.0
- */
-- (BKTPopinTransitionDirection)popinTransitionDirection;
-
-/**
- *  The transition direction to use when presenting a popin. For a list of possible transition direction, see BKTPopinTransitionDirection
- *
- *  @param transitionDirection A BKTPopinTransitionDirection value.
- *  @since v1.0
- */
-- (void)setPopinTransitionDirection:(BKTPopinTransitionDirection)transitionDirection;
-
-/**
- *  The options to apply to the popin. Default value is `BKTPopinDefault`.
- *
- *  @return The BKTPopinOption values as a bit field.
- *  @see -setPopinOptions:
- *  @since v1.0
- */
-- (BKTPopinOption)popinOptions;
-
-/**
- *  The options to apply to the popin. For a list of possible options, see BKTPopinOption
- *
- *  @param popinOptions The BKTPopinOption values separated by | character.
- *  @since v1.0
- */
-- (void)setPopinOptions:(BKTPopinOption)popinOptions;
-
 
 /**
  *  Get the custom in animation block. Default value is nil.
@@ -343,39 +319,5 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @since v1.3
  */
 - (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
-
-/**
- *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
- *
- *  @return The BKTPopinAlignementOption values as a bit field.
- *  @see -setPopinAlignement:
- *  @since v1.3
- */
-- (BKTPopinAlignementOption)popinAlignment;
-
-/**
- *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
- *
- *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
- *  @since v1.3
- */
-- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
-
-/**
- *  An object used to configure the blurred background.
- *
- *  @return The blur parameters object.
- *  @see -setBlurParameters:
- *  @since v1.4
- */
-- (BKTBlurParameters *)blurParameters;
-
-/**
- *  An object used to configure the blurred background.
- *
- *  @param blurParameters The blur parameters object.
- *  @sicne v1.4
- */
-- (void)setBlurParameters:(BKTBlurParameters *)blurParameters;
 
 @end

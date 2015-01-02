@@ -95,6 +95,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 
 @implementation BKTBlurParameters
+
 - (id)init
 {
     self = [super init];
@@ -115,6 +116,13 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 @end
 
 @implementation UIViewController (MaryPopin)
+
+@dynamic preferedPopinContentSize;
+@dynamic popinTransitionStyle;
+@dynamic popinTransitionDirection;
+@dynamic popinOptions;
+@dynamic popinAlignment;
+@dynamic blurParameters;
 
 #pragma mark - Popin presentation methods
 
