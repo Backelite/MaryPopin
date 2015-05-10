@@ -124,3 +124,7 @@ Contributions for bug fixing or improvements are welcomed. Feel free to submit a
 MaryPopin is available under the MIT license. See the LICENSE file for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-44164731-1/mary-popin/readme?pixel)](https://github.com/igrigorik/ga-beacon)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Backelite/marypopin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
