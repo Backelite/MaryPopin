@@ -169,6 +169,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [self addPopinToHierarchy:popinController];
             CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
             [popinController.view setFrame:popinFrame];
+            [popinController didMoveToParentViewController:self];
+            [self forwardAppearanceEndingIfNeeded:popinController];
             
             if ([popinController popinTransitionUsesDynamics] ) {
                 [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
@@ -181,8 +183,6 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                                     options:UIViewAnimationOptionCurveEaseInOut
                                  animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                  completion:^(BOOL finished) {
-                                     [popinController didMoveToParentViewController:self];
-                                     [self forwardAppearanceEndingIfNeeded:popinController];
                                      if (completion) {
                                          completion();
                                      }
@@ -193,8 +193,6 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                     [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
                                      animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
                                      completion:^(BOOL finished) {
-                        [popinController didMoveToParentViewController:self];
-                        [self forwardAppearanceEndingIfNeeded:popinController];
                         if (completion) {
                             completion();
                         }
