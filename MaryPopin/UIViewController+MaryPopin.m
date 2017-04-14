@@ -26,6 +26,11 @@
 #import "UIViewController+MaryPopin.h"
 #import <objc/runtime.h>
 
+//Add by Tistan
+
+static NSString * const kPopinViewControllerArrayIdentify = @"kPopinViewControllerArrayIdentify";
+static NSString * const kDimmingViewArrayIdentify = @"kDimmingViewArrayIdentify";
+
 //Standard margin value on iOS
 #define kMaryPopinStandardMargin 20.0f
 
@@ -103,6 +108,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         self.radius = 20.f;
         self.saturationDeltaFactor = 1.8f;
         self.tintColor = [UIColor clearColor];
+        self.originFrame = CGRectZero;
     }
     return self;
 }
@@ -121,65 +127,78 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)presentPopinController:(UIViewController *)popinController animated:(BOOL)animated
                     completion:(void(^)(void))completion
 {
-    [self presentPopinController:popinController fromRect:self.view.bounds animated:animated completion:completion];
+    [self presentPopinController:popinController fromRect:self.view.bounds needComputeFrame:YES animated:animated completion:completion];
 }
-
-- (void)presentPopinController:(UIViewController *)popinController fromRect:(CGRect)rect animated:(BOOL)animated
+// edit by Tristan need 传入yes可按该类原有方式计算frame 传入no则不会再次计算frame
+- (void)presentPopinController:(UIViewController *)popinController
+                      fromRect:(CGRect)rect
+              needComputeFrame:(BOOL)need
+                      animated:(BOOL)animated
                     completion:(void(^)(void))completion
 {
     NSAssert(nil != popinController, @"Popin controller cannot be nil");
     
-    if (self.presentedPopinViewController == nil) {
+    //by Tristan
+    if (!self.popinViewControllerArray) {
+        self.popinViewControllerArray = [NSMutableArray array];
+    }
+    [self.popinViewControllerArray addObject:popinController];
+    
+    //Background dimming view
+    UIView *dimmingView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [dimmingView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    
+    BKTPopinOption options = [popinController popinOptions];
+    if (! (options & BKTPopinDisableAutoDismiss)) {
+        UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentPopinController)];
+        [dimmingView addGestureRecognizer:tapGesture];
+    }
+    
+    if (options & BKTPopinDimmingViewStyleNone) {
+        [dimmingView setBackgroundColor:[UIColor clearColor]];
+    } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+        UIImage *bgImage = [self createImageFromView:self.view];
+        BKTBlurParameters *parameters = [popinController blurParameters];
+        bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:parameters.tintColor saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
+        UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
+        bgImageView.alpha = parameters.alpha;
+        [dimmingView addSubview:bgImageView];
+    } else {
+        [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
+    }
+    if (!self.dimmingViewArray) {
+        self.dimmingViewArray = [NSMutableArray array];
+    }
+    [self setDimmingView:dimmingView];//by Tristan
+    [self.dimmingViewArray addObject:dimmingView];//by Tristan
+    
+    if (YES == animated) {
+        dimmingView.alpha = 0.0f;
+        [self.view addSubview:dimmingView];
         
-        //Background dimming view
-        UIView *dimmingView = [[UIView alloc] initWithFrame:self.view.bounds];
-        [dimmingView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+        [UIView animateWithDuration:-1
+                         animations:^{
+                             dimmingView.alpha = 1.0f;
+                         }];
         
-        BKTPopinOption options = [popinController popinOptions];
-        if (! (options & BKTPopinDisableAutoDismiss)) {
-            UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentPopinController)];
-            [dimmingView addGestureRecognizer:tapGesture];
+        [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:YES];
+        [self addPopinToHierarchy:popinController];
+        CGRect popinFrame = rect;//edit by Tristan
+        if (need) {
+            popinFrame = [self computePopinFrame:popinController inRect:rect];
         }
+        [popinController.view setFrame:popinFrame];
         
-        if (options & BKTPopinDimmingViewStyleNone) {
-            [dimmingView setBackgroundColor:[UIColor clearColor]];
-        } else if (options & BKTPopinBlurryDimmingView && [self.view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            UIImage *bgImage = [self createImageFromView:self.view];
-            BKTBlurParameters *parameters = [popinController blurParameters];
-            bgImage = [bgImage marypopin_applyBlurWithRadius:parameters.radius tintColor:parameters.tintColor saturationDeltaFactor:parameters.saturationDeltaFactor maskImage:nil];
-            UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
-            bgImageView.alpha = parameters.alpha;
-            [dimmingView addSubview:bgImageView];
+        if ([popinController popinTransitionUsesDynamics] ) {
+            [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
         } else {
-            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
-        }
-        
-        [self setDimmingView:dimmingView];
-        
-        if (YES == animated) {
-            dimmingView.alpha = 0.0f;
-            [self.view addSubview:dimmingView];
-            
-            [UIView animateWithDuration:-1
-                             animations:^{
-                dimmingView.alpha = 1.0f;
-            }];
-            
-            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:YES];
-            [self addPopinToHierarchy:popinController];
-            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
-            [popinController.view setFrame:popinFrame];
-            
-            if ([popinController popinTransitionUsesDynamics] ) {
-                [self snapInAnimationForPopinController:popinController toPosition:popinFrame withDirection:popinController.popinTransitionDirection completion:completion];
-            } else {
-                if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
+            if ([UIView respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
                 [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
                                       delay:0.0
                      usingSpringWithDamping:[UIViewController dampingValueForTransitionStyle:popinController.popinTransitionStyle]
                       initialSpringVelocity:1.0
                                     options:UIViewAnimationOptionCurveEaseInOut
-                                 animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
+                                 animations:[self inAnimationForPopinController:popinController toPosition:popinFrame fromOriginFrame:popinController.blurParameters.originFrame]
                                  completion:^(BOOL finished) {
                                      [popinController didMoveToParentViewController:self];
                                      [self forwardAppearanceEndingIfNeeded:popinController];
@@ -187,40 +206,39 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
                                          completion();
                                      }
                                  }];
-                    
-                }
-                else {
-                    [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
-                                     animations:[self inAnimationForPopinController:popinController toPosition:popinFrame]
-                                     completion:^(BOOL finished) {
-                        [popinController didMoveToParentViewController:self];
-                        [self forwardAppearanceEndingIfNeeded:popinController];
-                        if (completion) {
-                            completion();
-                        }
-                    }];
-                }
+                
             }
-        } else {
-            //Adding
-            [self.view addSubview:dimmingView];
-            
-            //Adding controller
-            [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:NO];
-            [self addPopinToHierarchy:popinController];
-            CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
-            popinController.view.frame = popinFrame;
-            [popinController didMoveToParentViewController:self];
-            [self forwardAppearanceEndingIfNeeded:popinController];
-            if (completion) {
-                completion();
+            else {
+                [UIView animateWithDuration:[UIViewController animationDurationForTransitionStyle:popinController.popinTransitionStyle]
+                                 animations:[self inAnimationForPopinController:popinController toPosition:popinFrame fromOriginFrame:popinController.blurParameters.originFrame]
+                                 completion:^(BOOL finished) {
+                                     [popinController didMoveToParentViewController:self];
+                                     [self forwardAppearanceEndingIfNeeded:popinController];
+                                     if (completion) {
+                                         completion();
+                                     }
+                                 }];
             }
         }
+    } else {
+        //Adding
+        [self.view addSubview:dimmingView];
         
-        //Keyboard notification
-        if (! (options & BKTPopinIgnoreKeyboardNotification)) {
-            [[NSNotificationCenter defaultCenter] addObserver:popinController selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        //Adding controller
+        [self forwardAppearanceBeginningIfNeeded:popinController appearing:YES animated:NO];
+        [self addPopinToHierarchy:popinController];
+        CGRect popinFrame = [self computePopinFrame:popinController inRect:rect];
+        popinController.view.frame = popinFrame;
+        [popinController didMoveToParentViewController:self];
+        [self forwardAppearanceEndingIfNeeded:popinController];
+        if (completion) {
+            completion();
         }
+    }
+    
+    //Keyboard notification
+    if (! (options & BKTPopinIgnoreKeyboardNotification)) {
+        [[NSNotificationCenter defaultCenter] addObserver:popinController selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     }
 }
 
@@ -237,6 +255,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)dismissCurrentPopinControllerAnimated:(BOOL)animated completion:(void(^)(void))completion
 {
     UIViewController *presentedPopin = self.presentedPopinViewController;
+    if (!presentedPopin) {//by Tristan
+        presentedPopin = [self.popinViewControllerArray lastObject];//by Tristan
+    }//by Tristan
+    [self.popinViewControllerArray removeLastObject];//by Tristan
 
     [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:presentedPopin name:UIKeyboardWillShowNotification object:nil];
@@ -250,7 +272,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             //Removing background
             if (self.presentedPopinViewController == nil) {
                 [self.dimmingView removeFromSuperview];
-                [self setDimmingView:nil];
+                [self.dimmingViewArray removeLastObject];//by Tristan
+                [self setDimmingView:[self.dimmingViewArray lastObject]];//by Tristan
             }
         }];
         
@@ -260,7 +283,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             [self forwardAppearanceBeginningIfNeeded:presentedPopin appearing:NO animated:YES];
             [UIView animateWithDuration:0.3
                                   delay:0 options:UIViewAnimationOptionCurveEaseIn
-                             animations:[self outAnimationForPopinController:presentedPopin]
+                             animations:[self outAnimationForPopinController:presentedPopin toOriginFrame:presentedPopin.blurParameters.originFrame]
                              completion:^(BOOL finished) {
                                  [self removePopinFromHierarchy:presentedPopin];
                                  if (completion) {
@@ -274,7 +297,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         [self removePopinFromHierarchy:presentedPopin];
         //Removing background
         [self.dimmingView removeFromSuperview];
-        [self setDimmingView:nil];
+        [self.dimmingViewArray removeLastObject];//by Tristan
+        [self setDimmingView:[self.dimmingViewArray lastObject]];//by Tristan
         
         if (completion) {
             completion();
@@ -478,6 +502,26 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 }
 
 #pragma mark - Accessors
+//---by Tristan---//
+- (NSMutableArray *)popinViewControllerArray {
+    NSMutableArray *array = objc_getAssociatedObject(self, (__bridge const void *)(kPopinViewControllerArrayIdentify));
+    return array;
+}
+
+- (void)setPopinViewControllerArray:(NSMutableArray *)popinViewControllerArray {
+    objc_setAssociatedObject(self, (__bridge const void *)(kPopinViewControllerArrayIdentify), popinViewControllerArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableArray *)dimmingViewArray {
+    NSMutableArray *array = objc_getAssociatedObject(self, (__bridge const void *)(kDimmingViewArrayIdentify));
+    return array;
+}
+
+- (void)setDimmingViewArray:(NSMutableArray *)dimmingViewArray {
+    objc_setAssociatedObject(self, (__bridge const void *)(kDimmingViewArrayIdentify), dimmingViewArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+//---by Tristan---//
 
 - (UIViewController *)presentedPopinViewController
 {
@@ -617,7 +661,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 #pragma mark - Animations
 
-- (void (^)(void))inAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame
+// The param originFrame only used in zoomFromOriginPoint... which add by Tristan
+- (void (^)(void))inAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame fromOriginFrame:(CGRect)originFrame
 {
     BKTPopinTransitionStyle transitionStyle = popinController.popinTransitionStyle;
     BKTPopinTransitionDirection direction = popinController.popinTransitionDirection;
@@ -633,12 +678,15 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         case BKTPopinTransitionStyleCustom:
             if ([popinController popinCustomInAnimation])
                 return [self customInAnimationForPopinController:popinController toPosition:finalFrame withDirection:direction];
+        case BKTPopinTransitionStyleZoomFromOriginPoint:
+            return [self zoomFromOriginPointInAnimationForPopinController:popinController toPosition:finalFrame fromOriginFrame:originFrame];
         default:
             return [self alphaInAnimationForPopinController:popinController toPosition:finalFrame];
     }
 }
 
-- (void (^)(void))outAnimationForPopinController:(UIViewController *)popinController
+// The param originFrame only used in zoomFromOriginPoint... which add by Tristan
+- (void (^)(void))outAnimationForPopinController:(UIViewController *)popinController toOriginFrame:(CGRect)originFrame
 {
     BKTPopinTransitionStyle transitionStyle = popinController.popinTransitionStyle;
     BKTPopinTransitionDirection direction = popinController.popinTransitionDirection;
@@ -654,6 +702,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         case BKTPopinTransitionStyleCustom:
             if ([popinController popinCustomOutAnimation])
                 return [self customOutAnimationForPopinController:popinController withDirection:direction];
+        case BKTPopinTransitionStyleZoomFromOriginPoint:
+            return [self zoomFromOriginPointOutAnimationForPopinController:popinController toOriginFrame:originFrame];
         default:
             return [self alphaOutAnimationForPopinController:popinController];
     }
@@ -704,6 +754,33 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     void (^animation)(void) = ^{
         popinController.view.alpha = 0.0f;
         popinController.view.transform = CGAffineTransformMakeScale(5.0f, 5.0f);
+    };
+    return animation;
+}
+
+//Zoom from ogrigin point
+
+- (void (^)(void))zoomFromOriginPointInAnimationForPopinController:(UIViewController *)popinController toPosition:(CGRect)finalFrame fromOriginFrame:(CGRect)originFrame
+{
+    //Animation setup
+    CGPoint origin = CGPointMake(originFrame.origin.x, [UIScreen mainScreen].bounds.size.height / 2.f - 150.f);
+    popinController.view.frame = (CGRect){origin, originFrame.size};
+//    popinController.view.frame = originFrame;
+    popinController.view.alpha = 1.0;
+    //Change properties values
+    void (^animation)(void) = ^{
+        popinController.view.alpha = 1.0;
+        popinController.view.frame = finalFrame;
+    };
+    return animation;
+}
+
+- (void (^)(void))zoomFromOriginPointOutAnimationForPopinController:(UIViewController *)popinController toOriginFrame:(CGRect)originFrame
+{
+    //Change properties values
+    void (^animation)(void) = ^{
+        popinController.view.frame = originFrame;
+        popinController.view.alpha = 0.0;
     };
     return animation;
 }
@@ -849,6 +926,9 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             animationDuration = 0.8;
             break;
         case BKTPopinTransitionStyleSpringyZoom:
+            animationDuration = 0.5;
+            break;
+        case BKTPopinTransitionStyleZoomFromOriginPoint:
             animationDuration = 0.5;
             break;
         default:
