@@ -145,8 +145,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     [self.popinViewControllerArray addObject:popinController];
     
     //Background dimming view
-    UIView *dimmingView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [dimmingView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    UIView *dimmingView = [self loadDimmingViewWithPopinController:popinController];
     
     BKTPopinOption options = [popinController popinOptions];
     if (! (options & BKTPopinDisableAutoDismiss)) {
@@ -164,7 +163,8 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         bgImageView.alpha = parameters.alpha;
         [dimmingView addSubview:bgImageView];
     } else {
-        [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
+        // edit by Tristan, this action move to "loadDimmingViewWithPopinController:"
+        //        [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
     }
     if (!self.dimmingViewArray) {
         self.dimmingViewArray = [NSMutableArray array];
@@ -304,6 +304,37 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
             completion();
         }
         [self forwardAppearanceEndingIfNeeded:presentedPopin];
+    }
+}
+
+- (UIView *)loadDimmingViewWithPopinController:(UIViewController *)popinController {
+    switch (popinController.dimmingViewStyle) {
+        case BKTDimmingViewStyleBlurred:
+        {
+            UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, NO, 1);
+            [self.view drawViewHierarchyInRect:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) afterScreenUpdates:NO];
+            UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            CIImage *inputImage = [CIImage imageWithCGImage:snapshot.CGImage];
+            CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"
+                                          keysAndValues:kCIInputImageKey, inputImage,
+                                @"inputRadius", @(2.5), nil];
+            CIImage *outputImage = filter.outputImage;
+            CIContext *context = [CIContext contextWithOptions:nil];
+            CGImageRef outImage = [context createCGImage:outputImage
+                                                fromRect:[outputImage extent]];
+            UIImage *blurImage = [UIImage imageWithCGImage:outImage];
+            UIImageView *dimmingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, snapshot.size.width, snapshot.size.height)];
+            [dimmingView setImage:blurImage];
+            return dimmingView;
+        }
+        default:
+        {
+            UIView *dimmingView = [[UIView alloc] initWithFrame:self.view.bounds];
+            [dimmingView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+            [dimmingView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
+            return dimmingView;
+        }
     }
 }
 
@@ -591,6 +622,16 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 - (void)setPopinOptions:(BKTPopinOption)popinOptions
 {
     objc_setAssociatedObject(self, @selector(popinOptions),  [NSNumber numberWithInt:popinOptions], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BKTDimmingViewStyle)dimmingViewStyle
+{
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+
+- (void)setDimmingViewStyle:(BKTDimmingViewStyle)style
+{
+    objc_setAssociatedObject(self, @selector(dimmingViewStyle), [NSNumber numberWithInt:style], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BKTBlurParameters *)blurParameters
