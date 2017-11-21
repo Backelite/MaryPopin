@@ -356,7 +356,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
 /**
  *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
  *
- *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
+ *  @param popinAlignment The BKTPopinAlignementOption values separated by | character.
  *  @since v1.3
  */
 - (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
