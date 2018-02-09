@@ -585,6 +585,16 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
     objc_setAssociatedObject(self, @selector(popinCustomOutAnimation),  popinCustomOutAnimation, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
+- (void)setDismissDimmingViewCompletionBlock:(void(^)())dismissDimmingViewCompletionBlock
+{
+    objc_setAssociatedObject(self, @selector(dismissDimmingViewCompletionBlock), dismissDimmingViewCompletionBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (void(^)())dismissDimmingViewCompletionBlock
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
 - (BKTPopinAlignementOption)popinAlignment
 {
     return [objc_getAssociatedObject(self, _cmd) intValue];
