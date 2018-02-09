@@ -378,4 +378,13 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  */
 - (void)setBlurParameters:(BKTBlurParameters *)blurParameters;
 
+/**
+ *  An object used to dismiss dimming view.
+ *
+ *  @param dismissDimmingViewCompletionBlock Completion block.
+ *  @sicne v1.4.3
+ */
+- (void)setDismissDimmingViewCompletionBlock:(void(^)())dismissDimmingViewCompletionBlock;
+- (void(^)())dismissDimmingViewCompletionBlock;
+
 @end
