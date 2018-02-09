@@ -384,7 +384,7 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @param dismissDimmingViewCompletionBlock Completion block.
  *  @sicne v1.4.3
  */
-- (void)setDismissDimmingViewCompletionBlock:(void(^)())dismissDimmingViewCompletionBlock;
-- (void(^)())dismissDimmingViewCompletionBlock;
+- (void)setDismissDimmingViewCompletionBlock:(void(^)(void))dismissDimmingViewCompletionBlock;
+- (void(^)(void))dismissDimmingViewCompletionBlock;
 
 @end
