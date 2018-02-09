@@ -32,8 +32,8 @@ that is why we name it a popin controller. And as it is implemented as a categor
 
 ## Changes
 
-v1.4.2
-* Fixed an issue when dismissing chained popins
+v1.4.3
+* Add methods to dismiss dimming view.
 
 Previous changelogs are available on [this page](https://github.com/Backelite/MaryPopin/releases).
 
