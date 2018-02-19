@@ -44,6 +44,10 @@
  *  Property to customize blur tint color. Default is clear color.
  */
 @property (strong, nonatomic) UIColor *tintColor;
+/**
+ Add by Tristan only used in zoomFromOriginPoint... which add by Tristan
+ */
+@property (nonatomic) CGRect originFrame;
 
 @end
 
@@ -80,7 +84,11 @@ typedef NS_ENUM(NSInteger, BKTPopinTransitionStyle) {
     /**
      *  When the view controller is presented, its view has a custom animation.
      */
-    BKTPopinTransitionStyleCustom
+    BKTPopinTransitionStyleCustom,
+    /**
+     *  Add by Tristan
+     */
+    BKTPopinTransitionStyleZoomFromOriginPoint
 };
 
 /**
@@ -166,11 +174,32 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
 };
 
 /**
+ DimmingViewStyle add By Tristan
+ 
+ - BKTDimmingViewStyleTranslucence: Translucence (default)
+ - BKTDimmingViewStyleBlurred: Blurred
+ */
+typedef NS_ENUM(NSInteger, BKTDimmingViewStyle) {
+    BKTDimmingViewStyleTranslucence = 0,
+    BKTDimmingViewStyleBlurred      = 1
+};
+
+
+/**
  * `MaryPopin` is a category allowing modal-like presentation of view controllers but with more configuration options.
  * Configuration options include popin size, transition style, transition direction, response to keyboard notifications and auto dismiss.
  * @since v1.0
  */
 @interface UIViewController (MaryPopin) <UIDynamicAnimatorDelegate>
+
+/**
+ A array to store view controllers, because sometime we have to present mulitple view controllers. Add by Tristan
+ */
+@property (nonatomic, strong) NSMutableArray *popinViewControllerArray;
+/**
+ A array to store background views. Add by Tristan
+ */
+@property (nonatomic, strong) NSMutableArray *dimmingViewArray;
 
 ///---------------------
 /// @name Presentation and dismiss
@@ -197,7 +226,10 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @param completion      A completion handler, or `NULL`.
  *  @since v1.0
  */
-- (void)presentPopinController:(UIViewController *)popinController fromRect:(CGRect)rect animated:(BOOL)animated
+- (void)presentPopinController:(UIViewController *)popinController
+                      fromRect:(CGRect)rect
+              needComputeFrame:(BOOL)need
+                      animated:(BOOL)animated
                     completion:(void(^)(void))completion;
 
 /**
@@ -308,6 +340,20 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
  *  @since v1.0
  */
 - (void)setPopinOptions:(BKTPopinOption)popinOptions;
+
+/**
+ The background Style
+ 
+ @return dimmingViewStyle
+ */
+- (BKTDimmingViewStyle)dimmingViewStyle;
+
+/**
+ Set the background style
+ 
+ @param style default is BKTDimmingViewStyleTranslucence
+ */
+- (void)setDimmingViewStyle:(BKTDimmingViewStyle)style;
 
 
 /**
