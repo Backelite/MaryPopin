@@ -219,7 +219,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         
         //Keyboard notification
         if (! (options & BKTPopinIgnoreKeyboardNotification)) {
-            [[NSNotificationCenter defaultCenter] addObserver:popinController selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:popinController selector:@selector(mp_keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         }
     }
 }
@@ -285,7 +285,7 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
 
 #pragma mark - Responding to keyboard events
 
-- (void)keyboardWillShow:(NSNotification *)keyboardNotif
+- (void)mp_keyboardWillShow:(NSNotification *)keyboardNotif
 {
     NSDictionary *keyboardInfo = [keyboardNotif userInfo];
     
@@ -298,10 +298,10 @@ CG_INLINE CGRect    BkRectInRectWithAlignementOption(CGRect myRect, CGRect refRe
         [self.view setFrame:CGRectOffset(self.view.frame, 0.0f, 70.0f - CGRectGetMinY(self.view.frame))];
     } completion:NULL];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mp_keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWillHide:(NSNotification *)keyboardNotif
+- (void)mp_keyboardWillHide:(NSNotification *)keyboardNotif
 {
     NSDictionary *keyboardInfo = [keyboardNotif userInfo];
     
